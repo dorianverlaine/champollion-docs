@@ -9,7 +9,9 @@ borders, macOS code-block chrome — with two changes: the light theme is Apple'
 docs white (`#ffffff` page, `#1d1d1f` ink, `#d2d2d7`/`#e8e8ed` hairlines)
 instead of the reference's warm off-white, and the type is Apple's — San
 Francisco on Apple devices, the bundled Inter as its SF-alike everywhere else —
-in place of the reference's serif display face.
+in place of the reference's serif display face. The type scale and palette are
+measured off Apple's own documentation: a 17px body over 25px lines, 40/32/24px
+headings, #0066cc links, and #f5f5f7 fills.
 English lives at the root and the Simplified Chinese edition under `/zh-CN/`,
 with identical page paths in both trees.
 
