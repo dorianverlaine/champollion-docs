@@ -23,6 +23,12 @@ const sitemapAlias = {
 // `wrangler.toml` before the first real deployment.
 export default defineConfig({
 	site: 'https://champollion.dorian.page',
+	// The concept page moved from `routes` to `modes` when route A and route B
+	// were renamed for readers; the old URLs keep working as static redirects.
+	redirects: {
+		'/concepts/routes/': '/concepts/modes/',
+		'/zh-CN/concepts/routes/': '/zh-CN/concepts/modes/',
+	},
 	integrations: [
 		starlight({
 			title: 'Champollion',

@@ -36,9 +36,9 @@ hello from riscv64
 		From ELF loading to decoded-block caches, the JIT, and syscall dispatch.
 		[Translation](/concepts/translation/)
 	</Card>
-	<Card title="🔀 Route A and B">
+	<Card title="🔀 Direct mode and VM mode">
 		On the Mac itself, or inside an arm64 Linux VM with raw syscall
-		passthrough. [The two routes](/concepts/routes/)
+		passthrough. [The two modes](/concepts/modes/)
 	</Card>
 	<Card title="📖 CLI reference">
 		Every flag and environment variable `rvrun` understands.
@@ -48,7 +48,7 @@ hello from riscv64
 
 ## 📌 Status
 
-M5 is done, and route A's done criterion is met: riscv64 container images run
+M5 is done, and VM mode's done criterion is met: riscv64 container images run
 on the Mac, and Alpine and Debian roots run `apt`, CPython, and friends.
 [Project status](/project/status/) lists what works, the measured performance,
 and the known gaps.

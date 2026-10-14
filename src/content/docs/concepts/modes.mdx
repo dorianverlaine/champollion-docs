@@ -1,0 +1,43 @@
+---
+title: Direct mode and VM mode
+description: The two ways Champollion runs a riscv64 program — Direct mode on macOS, with Linux syscalls translated to the host, and VM mode inside an arm64 Linux VM, where syscalls are the kernel's.
+---
+
+Champollion runs a program in one of two modes. They share the same translator
+— guest memory, the interpreter, the JIT — and differ in what sits underneath:
+your Mac, or a Linux VM. The repository and its design brief still call them
+**route B** and **route A**, which is why each mention below keeps the old name
+in parentheses.
+
+## Direct mode: on the Mac
+
+`rvrun ./hello` on macOS — route B in the repository. The guest lives in one
+host process; its syscalls are dispatched to a Darwin backend that translates
+the differences from Linux, and everything else behaves like the Linux ABI the
+program expects. This is the daily loop: build, run, and debug a riscv64 binary
+straight from the Mac's own file system, with no VM in the way.
+
+Debugging lives here too: `rvrun -g 1234 prog` waits for a GDB remote
+connection with the guest stopped at its entry point, breakpoints are kept on
+the host side (guest code is never patched), and stepping and Ctrl-C are exact.
+
+## VM mode: inside a Linux VM
+
+For containers and full distributions — route A in the repository. `launcher/`
+builds `rvcontainer`, which pulls a `linux/riscv64` image, unpacks it into an
+ext4 file, boots an arm64 Linux VM, and registers `rvrun` as the VM's
+`binfmt_misc` handler. Inside the VM, riscv64 and arm64 share syscall numbers
+and structure layouts, so guest addresses are host addresses and any call the
+runtime does not emulate passes straight to the kernel. Alpine and Debian roots
+run `apt`, `bash`, `dpkg`, and CPython this way, and a guest `execve` is the
+kernel's again.
+
+Same runtime, different backend: when a syscall is not emulated, Direct mode
+translates it to Darwin, and VM mode hands it to a real Linux kernel.
+
+## Which mode runs my program?
+
+Direct mode is the default on the Mac and covers day-to-day development. Reach
+for VM mode when the program wants a full userland — package managers, service
+managers, containers — or when a syscall Direct mode does not emulate is in the
+way.

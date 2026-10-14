@@ -8,8 +8,8 @@ description: 在 Apple 芯片的 Mac 上从源码构建 rvrun，运行仓库自�
 
 ## 前置要求
 
-- 一台 Apple 芯片的 Mac（macOS arm64）。同一套核心也能以路线 A 跑在 arm64 Linux 上；见
-  [路线 A 与路线 B](/zh-CN/concepts/routes/)。
+- 一台 Apple 芯片的 Mac（macOS arm64）。同一套核心也能以 VM 模式跑在 arm64 Linux 上；见
+  [直接模式与 VM 模式](/zh-CN/concepts/modes/)。
 - Rust stable。工作区使用 edition 2024（需要 rustc 1.85 或更新）。
 - 可选：用 zig 0.17+ 重新构建自带的测试程序（`tests/fixtures/build.sh`）；基准测试用
   `hyperfine`。
