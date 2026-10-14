@@ -1,0 +1,129 @@
+---
+const lang = Astro.locals.starlightRoute?.lang ?? 'en';
+const locale = Astro.locals.starlightRoute?.locale;
+const prefix = locale && locale !== 'root' ? `/${locale}` : '';
+
+/*
+ * The reference's not-found page, in this site's clothes: one centered
+ * headline (rendered by the splash hero above this component) and one search
+ * field. The field is a real input that hands the keyboard to Starlight's
+ * search dialog the moment it takes focus, so there is no second search
+ * implementation to keep alive.
+ */
+const strings: Record<string, { placeholder: string; home: string }> = {
+	en: {
+		placeholder: 'Search the documentation',
+		home: 'Back to the home page',
+	},
+	'zh-CN': {
+		placeholder: '搜索文档',
+		home: '返回首页',
+	},
+};
+const t = strings[lang] ?? strings.en;
+---
+
+<div class="not-found">
+	<div class="search" role="search">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="18"
+			height="18"
+			viewBox="0 0 18 18"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="1.6"
+			stroke-linecap="round"
+			aria-hidden="true"
+		>
+			<circle cx="8" cy="8" r="5.25"></circle>
+			<path d="m12 12 4 4"></path>
+		</svg>
+		<input
+			class="search-input"
+			type="text"
+			readonly
+			data-open-search
+			placeholder={t.placeholder}
+			aria-label={t.placeholder}
+		/>
+	</div>
+
+	<p class="back"><a href={prefix || '/'}>{t.home}</a></p>
+</div>
+
+<script>
+	/*
+	 * Focus opens the header's search dialog and hands focus over: keeping it
+	 * on this field would reopen the dialog the moment it closes again.
+	 */
+	document.querySelectorAll<HTMLInputElement>('[data-open-search]').forEach((input) => {
+		input.addEventListener('focus', () => {
+			const button = document.querySelector('button[data-open-modal]');
+			if (button instanceof HTMLElement) button.click();
+			input.blur();
+		});
+	});
+</script>
+
+<style>
+	.not-found {
+		margin-block: 2rem 6rem;
+		text-align: center;
+	}
+
+	/* 490px wide and 52px tall, the reference's field, centred. */
+	.search {
+		display: flex;
+		align-items: center;
+		gap: 0.625rem;
+		max-inline-size: 30.625rem;
+		block-size: 3.25rem;
+		margin-inline: auto;
+		padding-inline: 1rem;
+		border: 1px solid var(--sl-color-hairline);
+		border-radius: 0.75rem;
+		background-color: var(--sl-color-bg);
+		color: var(--sl-color-gray-3);
+	}
+
+	.search:focus-within {
+		border-color: var(--sl-color-text-accent);
+	}
+
+	.search-input {
+		flex: 1;
+		min-inline-size: 0;
+		border: 0;
+		background: none;
+		font: inherit;
+		font-size: var(--sl-text-base);
+		color: var(--sl-color-text);
+		outline: none;
+	}
+
+	.search-input::placeholder {
+		color: var(--sl-color-gray-3);
+	}
+
+	.back {
+		margin: 2.25rem 0 0;
+		font-size: var(--sl-text-sm);
+	}
+
+	.back a {
+		color: var(--sl-color-text-accent);
+		text-decoration: none;
+	}
+
+	.back a:hover {
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+
+	@media (max-width: 50rem) {
+		.not-found {
+			margin-block: 1.5rem 4rem;
+		}
+	}
+</style>

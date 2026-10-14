@@ -732,3 +732,39 @@ header.header .site-title::after {
 	line-height: 1.25;
 	margin-block: 1.8rem 0.675rem; /* 28.8 / 10.8 */
 }
+
+/*
+ * The not-found page centres its splash hero, in the reference's headline
+ * measures: 48px at 600 over a 502px measure. The rules live here because
+ * Astro's scoped-style compiler drops `:global(:has(...))` selectors, and the
+ * hero belongs to Starlight, not to the page's own component.
+ */
+main:has(.not-found) .hero {
+	grid-template-columns: 100%;
+	text-align: center;
+	padding-block: 4.5rem 1rem;
+}
+
+main:has(.not-found) .hero h1 {
+	max-inline-size: 31.5rem;
+	margin-inline: auto;
+	font-size: 3rem;
+	line-height: 1.08365;
+	font-weight: 600;
+	letter-spacing: -0.003em;
+}
+
+/* A 404 has nothing to edit; the footer's edit row goes with it. */
+body:has(.not-found) .ch-footer-root .meta {
+	display: none;
+}
+
+@media (max-width: 50rem) {
+	main:has(.not-found) .hero {
+		padding-block: 3rem 1rem;
+	}
+
+	main:has(.not-found) .hero h1 {
+		font-size: 2.25rem;
+	}
+}

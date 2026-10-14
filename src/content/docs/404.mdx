@@ -1,8 +1,11 @@
 ---
 title: "404"
 description: Page not found.
+template: splash
+hero:
+  title: The page you’re looking for can’t be found.
 ---
 
-This page does not exist. It may have been moved or renamed.
+import NotFound from '../../components/NotFound.astro';
 
-[Back to the home page](/)
+<NotFound />
