@@ -35,7 +35,7 @@ export default defineConfig({
 			description:
 				'Documentation for Champollion, a user-mode RISC-V (RV64GC) Linux binary translator for macOS arm64.',
 			customCss: ['./src/styles/theme.css'],
-			favicon: '/favicon.svg',
+			favicon: '/favicon.png',
 			// WebMCP tools for browsers that expose `navigator.modelContext`.
 			// The script itself feature-detects and does nothing elsewhere.
 			head: [{ tag: 'script', attrs: { src: '/webmcp.js', type: 'module' } }],
