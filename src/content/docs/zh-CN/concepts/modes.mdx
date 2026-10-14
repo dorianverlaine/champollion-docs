@@ -1,15 +1,14 @@
 ---
 title: 直接模式与 VM 模式
-description: Champollion 运行 riscv64 程序的两种模式——直接模式运行在 macOS 上，由 Darwin 后端翻译 Linux 系统调用；VM 模式运行在 arm64 Linux 虚拟机中，由内核直接处理系统调用。
+description: Champollion 运行 riscv64 程序的两种模式——直接模式运行在 macOS 上，由 Darwin 后端翻译 Linux 系统调用；VM 模式对接真正的 Linux 内核，在 Mac 上经由虚拟机，在 arm64 Linux 主机上原生直接运行。
 ---
 
 Champollion 有两种运行模式。它们共用同一套翻译器——客户内存、解释器、JIT——区别只在于其下
-承载的环境：你的 Mac，或一台 Linux 虚拟机。仓库与设计文档中仍称它们为 **route B** 和
-**route A**，因此下文每次提及时都会在括号中保留旧称。
+承载的环境：你的 Mac，或一个 Linux 内核。
 
 ## 直接模式：运行在 Mac 上
 
-在 macOS 上执行 `rvrun ./hello`——仓库中称为 route B。客户程序存在于单个宿主进程内；系统调用
+在 macOS 上执行 `rvrun ./hello`。客户程序存在于单个宿主进程内；系统调用
 交给 Darwin 后端，由它翻译与 Linux 的差异；其余部分对程序而言就是它期待的 Linux ABI。这是
 日常开发的主要流程：构建、运行、调试 riscv64 二进制，全程直接使用 Mac 的文件系统，中间没有
 虚拟机。
@@ -17,13 +16,18 @@ Champollion 有两种运行模式。它们共用同一套翻译器——客户�
 调试同样属于这一模式：`rvrun -g 1234 prog` 会等待 GDB 远程连接，客户程序停在入口点；断点保存在宿主
 一侧（不会改动客户代码），单步执行和 Ctrl-C 都精确可控。
 
-## VM 模式：运行在 Linux 虚拟机中
+## VM 模式：对接真正的 Linux 内核
 
-需要容器和完整发行版时使用 VM 模式——仓库中称为 route A。`launcher/` 会构建 `rvcontainer`：拉取
+需要容器和完整发行版时使用 VM 模式。`launcher/` 会构建 `rvcontainer`：拉取
 `linux/riscv64` 镜像、解包成 ext4 文件、启动一台 arm64 Linux 虚拟机，并把 `rvrun` 注册为该
 虚拟机的 `binfmt_misc` 处理器。在虚拟机里，riscv64 与 arm64 共用系统调用号和结构体布局，因此
 客户地址就是宿主地址，运行时没有模拟的调用会直接透传给内核。Alpine 和 Debian 的根文件系统就
 这样运行 `apt`、`bash`、`dpkg` 和 CPython，而客户自己的 `execve` 也重新交还给内核处理。
+
+### 运行在 arm64 Linux 主机上
+
+虚拟机就是主机本身：同一份构建作为主机的 `binfmt_misc` 处理器运行，
+`docker run --platform linux/riscv64 …` 无需任何虚拟机。一行注册命令见仓库 README。
 
 同一个运行时，不同的后端：未模拟的系统调用，直接模式将其翻译给 Darwin，VM 模式则交由真正的
 Linux 内核处理。

@@ -16,10 +16,12 @@ reported against.
   busybox (pipelines, job control, subshells) and CPython 3.14 (subprocess,
   asyncio, multiprocessing) run unmodified against an Alpine riscv64 sysroot
   and match native output in the test suite.
-- **M6 — VM mode (route A), done criterion met, not yet declared.** riscv64 container
+- **M6 — VM mode, done criterion met, not yet declared.** riscv64 container
   images run on the Mac through `rvcontainer`, and Alpine and Debian roots run
   `busybox`, `bash`, `coreutils`, `dpkg`, `apt`, `perl`, and CPython;
-  `apt-get update` and package installation work as well.
+  `apt-get update` and package installation work as well. The same build also
+  runs natively on arm64 Linux hosts as a `binfmt_misc` handler — `docker run
+  --platform linux/riscv64 …` needs no VM.
 
 ## Performance (October 2026)
 
@@ -38,13 +40,13 @@ faster.
 
 ## Known gaps
 
-Direct mode (route B), in the order a program is likely to notice: dynamically
+Direct mode, in the order a program is likely to notice: dynamically
 linked programs get no persistent code cache; realtime signals do not queue; of the
 interval timers, only `ITIMER_REAL` works; startup costs about 0.5 ms more than
 a static `hello` did before the host signal thread (3.4 ms against native
 1.9 ms).
 
-VM mode (route A): every `run` unpacks the image again; the Kata kernel is
+VM mode: every `run` unpacks the image again; the Kata kernel is
 6.12 while Containerization tests from 6.14.9; Linux builds linked by GNU `ld` run SQLite
 about 12% slower than zig-linked ones, cause unknown.
 
