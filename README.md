@@ -4,10 +4,12 @@ The documentation website for [Champollion](https://github.com/dorian-zhao/champ
 a user-mode RISC-V (RV64GC) Linux binary translator for macOS arm64.
 
 Astro + Starlight, deployed as a Cloudflare Worker. The design is the one from
-`~/code/pingclair-docs` — Inter for text, Literata for display, JetBrains Mono
-for code, near-black links, hairline borders, macOS code-block chrome — with one
-change: the light theme is Apple's docs white (`#ffffff` page, `#1d1d1f` ink,
-`#d2d2d7`/`#e8e8ed` hairlines) instead of the reference's warm off-white.
+`~/code/pingclair-docs` — JetBrains Mono for code, near-black links, hairline
+borders, macOS code-block chrome — with two changes: the light theme is Apple's
+docs white (`#ffffff` page, `#1d1d1f` ink, `#d2d2d7`/`#e8e8ed` hairlines)
+instead of the reference's warm off-white, and the type is Apple's — San
+Francisco on Apple devices, the bundled Inter as its SF-alike everywhere else —
+in place of the reference's serif display face.
 English lives at the root and the Simplified Chinese edition under `/zh-CN/`,
 with identical page paths in both trees.
 

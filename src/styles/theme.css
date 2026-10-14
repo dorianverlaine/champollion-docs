@@ -2,25 +2,25 @@
  * Typography, colour, and layout.
  *
  * The values follow the documentation design the project takes as its
- * reference, measured from that site rather than guessed: a warm humanist
- * grotesk for body text, a serif display face for h1 and h2 at regular weight,
- * a typewriter-adjacent monospace for code, a neutral grey ramp rather than a
- * blue-grey one, near-black text and links instead of a coloured accent,
- * hairline borders, and a page container that stops growing at 92rem.
+ * reference, measured from that site rather than guessed: a typewriter-adjacent
+ * monospace for code, a neutral grey ramp rather than a blue-grey one,
+ * near-black text and links instead of a coloured accent, hairline borders,
+ * and a page container that stops growing at 92rem.
  *
  * The light palette is Apple's documentation white rather than the reference's
  * warm off-white: a pure white page (#ffffff), #1d1d1f ink, #d2d2d7/#e8e8ed
  * hairlines, and #f5f5f7 for filled surfaces such as inline code.
  *
- * The faces are the ones this project uses elsewhere: Literata for display,
- * Inter for text, JetBrains Mono for code. The reference's own faces are not
- * published, so they are not borrowable.
+ * The type is Apple's: headings and text are set in the system sans, so Apple
+ * devices render San Francisco — the face Apple's own documentation uses —
+ * and every other platform falls back to Inter, this project's SF-alike,
+ * because SF Pro itself is not licensable for the web. JetBrains Mono stays
+ * for code.
  *
- * Latin glyphs come from Inter; Chinese glyphs fall through to the platform's
- * CJK font, because shipping a CJK webfont costs megabytes for text the reader
- * already has.
+ * Latin glyphs come from San Francisco or Inter; Chinese glyphs fall through
+ * to the platform's CJK font, because shipping a CJK webfont costs megabytes
+ * for text the reader already has.
  */
-@import '@fontsource-variable/literata';
 @import '@fontsource-variable/inter';
 @import '@fontsource-variable/jetbrains-mono';
 
@@ -28,24 +28,26 @@
 :root {
 	--sl-font:
 		/*
-		 * The colour emoji fonts sit directly after the Latin face and before the
-		 * CJK ones on purpose. A CJK font also carries monochrome symbol glyphs
-		 * for codepoints such as ✍ and ⚙, so with the emoji fonts at the end of
-		 * the stack those marks were drawn as flat text glyphs instead of emoji —
-		 * which is what looked low-resolution.
+		 * System first: on Apple devices the stack resolves to San Francisco and
+		 * nothing is downloaded; everywhere else it resolves to the bundled
+		 * Inter, whose look matches SF closely. The platform's own UI fonts sit
+		 * after Inter in case the webfont fails to load.
+		 *
+		 * The colour emoji fonts sit directly after the Latin faces and before
+		 * the CJK ones on purpose. A CJK font also carries monochrome symbol
+		 * glyphs for codepoints such as ✍ and ⚙, so with the emoji fonts at the
+		 * end of the stack those marks were drawn as flat text glyphs instead of
+		 * emoji — which is what looked low-resolution.
 		 */
-		'Inter Variable', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', -apple-system,
-		BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif, 'PingFang TC', 'PingFang SC',
+		-apple-system, BlinkMacSystemFont, 'Inter Variable', 'Apple Color Emoji', 'Segoe UI Emoji',
+		'Noto Color Emoji', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, system-ui, sans-serif,
+		'PingFang TC', 'PingFang SC',
 		'Hiragino Sans', 'Noto Sans TC', 'Noto Sans SC', 'Noto Sans CJK TC', 'Noto Sans CJK SC',
 		'Microsoft JhengHei', 'Microsoft YaHei';
 	--sl-font-mono:
 		'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
 		'Liberation Mono', 'Courier New', 'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei',
 		monospace;
-	--ch-font-serif:
-		'Literata Variable', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Iowan Old Style',
-		'Songti TC', 'Songti SC', 'LiSong Pro', 'Noto Serif TC', 'Noto Serif SC', 'Hiragino Mincho ProN',
-		'Yu Mincho', 'Noto Serif JP', Georgia, 'Times New Roman', Times, serif;
 
 	/* Type scale: 16px body, 30-36px page title. */
 	--sl-text-xs: 0.8125rem; /* 13px */
@@ -158,31 +160,20 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
-/* Every content heading is the display serif, as in the reference. */
+/* Headings are the same sans as the body, semibold, as in Apple's
+   documentation; the reference's serif display face is gone. */
 h1,
 h2 {
-	font-family: var(--ch-font-serif);
-	/* Literata's 400 is a touch light at display sizes, and the reference's
-	   serif is set at the same weight it uses for body text. */
-	font-weight: 500;
-	letter-spacing: 0.01em;
-}
-
-.content-panel h1,
-.content-panel h2 {
-	/*
-	 * Playfair's optical-size axis narrows the letterforms at display sizes,
-	 * which reads as horizontally squeezed. Using the text instance keeps the
-	 * proportions the reader expects from a heading.
-	 */
-	font-optical-sizing: none;
+	font-family: var(--sl-font);
+	font-weight: 600;
+	letter-spacing: -0.01em;
 }
 
 .sl-markdown-content h3,
 .sl-markdown-content h4,
 .sl-markdown-content h5 {
-	font-weight: 400;
-	letter-spacing: 0;
+	font-weight: 600;
+	letter-spacing: -0.005em;
 }
 
 /* Content links are underlined, not coloured, so they survive greyscale. */
@@ -651,9 +642,9 @@ header.header .site-title::after {
 
 .hero h1,
 .hero .title {
-	font-family: var(--ch-font-serif);
-	font-weight: 400;
-	letter-spacing: -0.01em;
+	font-family: var(--sl-font);
+	font-weight: 600;
+	letter-spacing: -0.015em;
 }
 
 .hero .actions a {
@@ -691,15 +682,11 @@ header.header .site-title::after {
 }
 
 .sl-markdown-content h3:not(:where(.not-content *)) {
-	font-family: var(--ch-font-serif);
-	font-weight: 400;
 	line-height: 1.4;
 	margin-block: 2rem 0.875rem; /* 32 / 14 */
 }
 
 .sl-markdown-content h4:not(:where(.not-content *)) {
-	font-family: var(--ch-font-serif);
-	font-weight: 400;
 	line-height: 1.5;
 	margin-block: 1.8rem 0.675rem; /* 28.8 / 10.8 */
 }
