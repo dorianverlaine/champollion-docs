@@ -28,8 +28,10 @@ pnpm scan:agents # agent-readiness of the published site
 ## Deployment
 
 `wrangler.toml` describes the Worker: `dist/` is uploaded as static assets and
-`worker/index.js` runs in front of them. Cloudflare's Workers Builds runs
-`pnpm build` and then `wrangler deploy` for every push to `main`.
+`worker/index.js` runs in front of them, with `champollion.aqeo.dev` in the
+route list and observability (persisted logs, traces, and issues) switched on.
+Cloudflare's Workers Builds is connected to this repository: every push to
+`main` runs `pnpm build` and then `npx wrangler deploy`.
 
 ## The agent surface
 
