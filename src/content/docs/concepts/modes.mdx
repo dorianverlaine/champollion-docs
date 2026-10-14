@@ -14,10 +14,10 @@ in parentheses.
 `rvrun ./hello` on macOS — route B in the repository. The guest lives in one
 host process; its syscalls are dispatched to a Darwin backend that translates
 the differences from Linux, and everything else behaves like the Linux ABI the
-program expects. This is the daily loop: build, run, and debug a riscv64 binary
-straight from the Mac's own file system, with no VM in the way.
+program expects. This is the primary development loop: build, run, and debug a
+riscv64 binary directly from the Mac's file system, without a VM in between.
 
-Debugging lives here too: `rvrun -g 1234 prog` waits for a GDB remote
+Debugging is available here as well: `rvrun -g 1234 prog` waits for a GDB remote
 connection with the guest stopped at its entry point, breakpoints are kept on
 the host side (guest code is never patched), and stepping and Ctrl-C are exact.
 
@@ -33,11 +33,11 @@ run `apt`, `bash`, `dpkg`, and CPython this way, and a guest `execve` is the
 kernel's again.
 
 Same runtime, different backend: when a syscall is not emulated, Direct mode
-translates it to Darwin, and VM mode hands it to a real Linux kernel.
+translates it to Darwin, and VM mode passes it to a real Linux kernel.
 
-## Which mode runs my program?
+## Choosing a mode
 
-Direct mode is the default on the Mac and covers day-to-day development. Reach
-for VM mode when the program wants a full userland — package managers, service
-managers, containers — or when a syscall Direct mode does not emulate is in the
-way.
+Direct mode is the default on the Mac and covers day-to-day development. Use
+VM mode when the program requires a full userland — package managers, service
+managers, containers — or when a syscall Direct mode does not emulate is in
+the way.

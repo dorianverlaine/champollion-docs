@@ -3,12 +3,12 @@ title: 快速开始
 description: 在 Apple 芯片的 Mac 上从源码构建 rvrun，运行仓库自带的 hello 程序，并用 RVRUN_* 环境变量观察客户程序。
 ---
 
-`rvrun` 就是全部的命令行界面：它接收一个 riscv64 Linux ELF（或者一个指向它的 `#!` 脚本）以及
-该程序的参数。本页把它构建出来，再跑起仓库自带的程序——这是证明整条工具链可用所需的最小闭环。
+`rvrun` 即完整的命令行界面：它接收一个 riscv64 Linux ELF（或指向它的 `#!` 脚本）以及该程序
+的参数。本页先将其构建出来，再运行仓库自带的程序——这是验证整条工具链可用所需的最小流程。
 
 ## 前置要求
 
-- 一台 Apple 芯片的 Mac（macOS arm64）。同一套核心也能以 VM 模式跑在 arm64 Linux 上；见
+- 一台 Apple 芯片的 Mac（macOS arm64）。同一套核心也可以以 VM 模式运行在 arm64 Linux 上；见
   [直接模式与 VM 模式](/zh-CN/concepts/modes/)。
 - Rust stable。工作区使用 edition 2024（需要 rustc 1.85 或更新）。
 - 可选：用 zig 0.17+ 重新构建自带的测试程序（`tests/fixtures/build.sh`）；基准测试用
@@ -24,26 +24,26 @@ cargo build --release -p rvrun
 
 ## 运行一个程序
 
-仓库里带了一个很小的测试程序，用来验证整条流水线；它只打印一行：
+仓库中包含一个很小的测试程序，用于验证整条流水线；它只打印一行：
 
 ```console
 $ ./target/release/rvrun tests/fixtures/hello
 hello from riscv64
 ```
 
-接下来可以指向真正的程序。任何 riscv64 Linux 二进制都可以；如果它是动态链接的，还需要对应的
+接下来可以运行真正的程序。任何 riscv64 Linux 二进制均可；若它是动态链接的，还需要对应的
 用户态环境：
 
 ```sh
 ./target/release/rvrun -L /path/to/riscv64-rootfs ./some-program
 ```
 
-`-L` 会优先在该目录（sysroot）里解析客户程序的绝对路径——动态加载器、库文件、`/etc` 配置——
-用法和 `qemu-riscv64 -L` 一样。
+`-L` 会优先在该目录（sysroot）中解析客户程序的绝对路径——动态加载器、库文件、`/etc` 配置——
+用法与 `qemu-riscv64 -L` 相同。
 
-## 看它工作
+## 追踪与剖析
 
-三个环境变量能打开有意思的输出：
+三个环境变量可以启用诊断输出：
 
 ```sh
 RVRUN_STRACE=1 ./target/release/rvrun tests/fixtures/hello  # every syscall
@@ -59,4 +59,4 @@ cargo test        # the whole suite on the Mac
 tools/linux.sh    # the same suite on arm64 Linux, in release mode
 ```
 
-完成一项改动之前，两个宿主平台都会保持全绿。
+一项改动只有在两个宿主平台均通过后才算完成。

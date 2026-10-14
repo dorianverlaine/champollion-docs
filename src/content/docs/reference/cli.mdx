@@ -17,7 +17,7 @@ starting that interpreter.
 
 - `-g PORT` — wait for a GDB remote connection on `127.0.0.1:PORT` before
   running, with the guest stopped at its entry point, like `qemu-riscv64 -g`.
-  Port 0 picks a free port and prints it.
+  Port 0 selects a free port and prints it.
 - `-L SYSROOT` — resolve the guest's absolute paths (its dynamic loader,
   libraries, `/etc` files) under SYSROOT first, like `qemu-riscv64 -L`; also
   `RVRUN_SYSROOT`.

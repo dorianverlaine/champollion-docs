@@ -1,9 +1,9 @@
 ---
 title: Champollion
-description: 面向 macOS arm64 的用户态 RISC-V（RV64GC）Linux 二进制翻译器。用 rvrun ./hello 直接运行 riscv64 Linux 程序——无需虚拟机，也没有客户机内核。
+description: 面向 macOS arm64 的用户态 RISC-V（RV64GC）Linux 二进制翻译器。使用 rvrun ./hello 直接运行 riscv64 Linux 程序——无需虚拟机，也没有客户机内核。
 template: splash
 hero:
-  tagline: 在 Apple 芯片上运行 riscv64 Linux 程序。rvrun 加载 ELF，逐条翻译执行，并把程序的 Linux 系统调用转发给 Mac。
+  tagline: 在 Apple 芯片上运行 riscv64 Linux 程序。rvrun 加载 ELF，逐条翻译执行，并将程序的 Linux 系统调用转发给 Mac。
   actions:
     - text: 快速开始
       link: /zh-CN/start/getting-started/
@@ -16,7 +16,7 @@ hero:
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
 Champollion 是一个用户态的 RISC-V（RV64GC）Linux 二进制翻译器。程序以普通宿主进程的身份运行：
-没有虚拟机启动，也没有客户机内核垫在下面，程序发起的 Linux 系统调用由翻译器处理，或者转发给宿主。
+不会启动虚拟机，也没有客户机内核；程序发起的 Linux 系统调用由翻译器处理，无法处理的则转发给宿主。
 
 ```console
 $ rvrun tests/fixtures/hello
@@ -27,7 +27,7 @@ hello from riscv64
 
 <CardGrid>
 	<Card title="🚀 快速开始">
-		从源码构建 `rvrun`，跑起仓库自带的测试程序。
+		从源码构建 `rvrun`，并运行仓库自带的测试程序。
 		[快速开始](/zh-CN/start/getting-started/)
 	</Card>
 	<Card title="🧠 翻译原理">
@@ -35,7 +35,7 @@ hello from riscv64
 		[翻译原理](/zh-CN/concepts/translation/)
 	</Card>
 	<Card title="🔀 直接模式与 VM 模式">
-		直接跑在 Mac 上，或放进 arm64 Linux 虚拟机做系统调用透传。
+		直接运行在 Mac 上，或置于 arm64 Linux 虚拟机中进行系统调用透传。
 		[两种模式](/zh-CN/concepts/modes/)
 	</Card>
 	<Card title="📖 CLI 参考">
@@ -46,6 +46,6 @@ hello from riscv64
 
 ## 📌 状态
 
-M5 已完成，VM 模式的达成标准也已满足：riscv64 容器镜像可以在 Mac 上跑起来，Alpine 与 Debian 的
-根文件系统里能运行 `apt`、CPython 等等。[项目状态](/zh-CN/project/status/) 列出了已经能用的部分、
+M5 已完成，VM 模式的达成标准也已满足：riscv64 容器镜像可以在 Mac 上运行，Alpine 与 Debian 的
+根文件系统中也可以运行 `apt`、CPython 等程序。[项目状态](/zh-CN/project/status/) 列出了已经能用的部分、
 实测性能，以及已知的缺口。

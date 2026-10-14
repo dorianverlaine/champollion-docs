@@ -8,8 +8,8 @@ description: What happens between loading a riscv64 ELF and executing its syscal
 Champollion is user-mode only. A guest program is not a simulated machine; it
 is the host process itself. `rvrun` loads the ELF, maps its segments into a
 reserved guest address space, and starts executing at its entry point. When the
-program asks the kernel for something, the request is served by the runtime —
-implemented in Rust when it can be, translated to the host when it cannot.
+program makes a system call, the runtime serves it — implemented directly
+where possible, translated to the host where it is not.
 
 ## From file to first instruction
 
@@ -44,7 +44,7 @@ back to the interpreter.
 ## Syscalls and signals
 
 Guest syscalls use the Linux ABI. Some are served by the runtime itself
-(`mmap`, `brk`, and friends); the rest cross a small `HostOs` interface. Its
+(`mmap`, `brk`, and similar calls); the rest cross a small `HostOs` interface.
 macOS backend translates the differences — `open` flag bits, errno values,
 signals, `flock` — and its Linux backend passes calls straight to the kernel,
 identity address space included. Errors come back as Linux errno values either

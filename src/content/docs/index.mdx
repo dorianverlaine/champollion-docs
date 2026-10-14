@@ -16,8 +16,8 @@ hero:
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
 Champollion is a user-mode RISC-V (RV64GC) Linux binary translator. A program
-runs as an ordinary process on the host: no VM boots, no guest kernel sits
-underneath, and the Linux system calls it makes are served by the translator or
+runs as an ordinary process on the host: no VM boots and no guest kernel is
+involved, and the Linux system calls it makes are served by the translator or
 forwarded to the host's.
 
 ```console
@@ -49,6 +49,6 @@ hello from riscv64
 ## 📌 Status
 
 M5 is done, and VM mode's done criterion is met: riscv64 container images run
-on the Mac, and Alpine and Debian roots run `apt`, CPython, and friends.
+on the Mac, and Alpine and Debian roots run `apt`, CPython, and other programs.
 [Project status](/project/status/) lists what works, the measured performance,
 and the known gaps.
