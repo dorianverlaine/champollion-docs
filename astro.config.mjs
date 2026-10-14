@@ -42,6 +42,8 @@ export default defineConfig({
 				Head: './src/components/Head.astro',
 				// Theme and language pickers as menus rather than native selects.
 				LanguageSelect: './src/components/LanguageSelect.astro',
+				// Previous/next as a line of links rather than two large cards.
+				Pagination: './src/components/Pagination.astro',
 			},
 			// The same pair the reference site uses, so syntax colors match.
 			expressiveCode: {
