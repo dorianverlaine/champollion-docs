@@ -26,3 +26,25 @@ not_found_handling = "404-page"
 # The script may need to answer before the assets server does (the reference
 # site negotiates Markdown there), so it runs first.
 run_worker_first = true
+
+# 🔭 Observability: logs and traces persist to the Cloudflare dashboard at
+# full sampling, and real-time issue detection is on. The dashboard's prompt
+# spells the last section `issue_detection`, but wrangler's schema (4.150 and
+# 4.151) rejects that name and calls it `issues`; the schema wins, because
+# `wrangler deploy` is what Workers Builds runs.
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+invocation_logs = true
+persist = true
+
+[observability.traces]
+enabled = true
+head_sampling_rate = 1
+persist = true
+
+[observability.issues]
+enabled = true
