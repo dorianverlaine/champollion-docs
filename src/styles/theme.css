@@ -121,6 +121,21 @@
 	}
 }
 
+/*
+ * Chinese headings take one step down from the Latin scale. CJK glyphs fill
+ * the em box far more than Latin ones, so the same 40/32/24px reads a step
+ * louder on the Chinese pages; the sizes below bring the two editions back to
+ * equal presence.
+ */
+:root:lang(zh-CN) {
+	--sl-text-h1: 2.25rem; /* 36px */
+	--sl-text-h2: 1.75rem; /* 28px */
+	--sl-text-h3: 1.3125rem; /* 21px */
+	--sl-text-h4: 1.0625rem; /* 17px */
+	--sl-text-h5: 1rem; /* 16px */
+	--sl-text-5xl: 2.25rem; /* the splash hero title */
+}
+
 :root[data-theme='light'] {
 	/* Colours (light). The page is Apple's docs white, not a warm off-white:
 	   pure white sheets, near-black ink, a #d2d2d7/#e8e8ed hairline ramp, and
