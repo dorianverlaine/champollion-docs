@@ -33,6 +33,10 @@ export default defineConfig({
 			// collection; with the entry present, the two routes collide and the
 			// build warns about it. Let the content route serve `/404` instead.
 			disable404Route: true,
+			components: {
+				// Theme and language pickers as menus rather than native selects.
+				LanguageSelect: './src/components/LanguageSelect.astro',
+			},
 			// The same pair the reference site uses, so syntax colors match.
 			expressiveCode: {
 				themes: ['github-light-default', 'dark-plus'],
@@ -44,18 +48,39 @@ export default defineConfig({
 					href: 'https://github.com/dorian-zhao/champollion',
 				},
 			],
-			// English only for now. The reference site keeps a `root` + `zh-TW`
-			// pair; adding the Chinese tree later takes the same arrangement here
-			// — `locales`, a `zh-TW/` directory, and the language picker component.
+			// The default locale lives at the site root, so it is configured under
+			// the `root` key. Listing it as `en` instead would make Starlight look
+			// for English pages in an `en/` directory. The language menu is built
+			// from this object in insertion order, so that object is the menu order.
 			defaultLocale: 'root',
+			locales: {
+				root: { label: 'English', lang: 'en' },
+				'zh-CN': { label: '简体中文', lang: 'zh-CN' },
+			},
 			editLink: {
 				baseUrl: 'https://github.com/dorian-zhao/champollion-docs/edit/main/',
 			},
 			sidebar: [
-				{ label: 'Start', items: [{ autogenerate: { directory: 'start' } }] },
-				{ label: 'Concepts', items: [{ autogenerate: { directory: 'concepts' } }] },
-				{ label: 'Reference', items: [{ autogenerate: { directory: 'reference' } }] },
-				{ label: 'Project', items: [{ autogenerate: { directory: 'project' } }] },
+				{
+					label: 'Start',
+					translations: { 'zh-CN': '开始' },
+					items: [{ autogenerate: { directory: 'start' } }],
+				},
+				{
+					label: 'Concepts',
+					translations: { 'zh-CN': '核心概念' },
+					items: [{ autogenerate: { directory: 'concepts' } }],
+				},
+				{
+					label: 'Reference',
+					translations: { 'zh-CN': '参考手册' },
+					items: [{ autogenerate: { directory: 'reference' } }],
+				},
+				{
+					label: 'Project',
+					translations: { 'zh-CN': '项目信息' },
+					items: [{ autogenerate: { directory: 'project' } }],
+				},
 			],
 		}),
 		sitemapAlias,

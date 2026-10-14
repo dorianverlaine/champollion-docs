@@ -1,0 +1,44 @@
+---
+title: 项目状态
+description: 截至 2026 年 10 月，今天已经能用的部分——里程碑 M5 与 M6、实测性能，以及已知的缺口。
+---
+
+Champollion 是一个学习项目，在
+[dorian-zhao/champollion](https://github.com/dorian-zhao/champollion) 上公开开发。本页是
+某一时刻的快照；仓库里的[设计文档](https://github.com/dorian-zhao/champollion/blob/main/docs/design.md)
+才是事实来源，每次性能改动的对照基线也记录在那里。
+
+## 已经能用的部分
+
+- **M5，已完成。** 多线程 C 和 Go 程序可以在路线 B 下运行。Alpine 的 busybox（管道、作业
+  控制、子 shell）与 CPython 3.14（subprocess、asyncio、multiprocessing）无需修改，直接对着
+  Alpine 的 riscv64 sysroot 运行，输出与原生基准在测试套件中完全一致。
+- **M6——路线 A，达成标准已满足，尚未正式宣告。** riscv64 容器镜像通过 `rvcontainer` 在 Mac
+  上运行；Alpine 和 Debian 的根文件系统能跑 `busybox`、`bash`、`coreutils`、`dpkg`、`apt`、
+  `perl` 和 CPython，`apt-get update` 与安装软件包也能正常工作。
+
+## 性能（2026 年 10 月）
+
+在 Apple 芯片上相对原生 arm64 测量，数值为原生耗时的倍数（越低越好）：
+
+| 程序 | 相对原生的倍数 |
+| --- | --- |
+| C | 1.5× |
+| n-body | 1.37× |
+| Lua | ~2.0× |
+| SQLite | 1.87× |
+
+在同一台机器的 OrbStack 中对比 `qemu-riscv64`：Lua 快 4.8×，SQLite 快 4.2×。
+
+## 已知缺口
+
+路线 B（按程序容易察觉到的顺序）：动态链接的程序没有持久化代码缓存；实时信号不会排队；
+间隔定时器只支持 `ITIMER_REAL`；启动开销比引入宿主信号线程之前的静态 `hello` 多约 0.5 ms
+（3.4 ms 对原生 1.9 ms）。
+
+路线 A：每次 `run` 都会重新解包镜像；Kata 内核为 6.12，而 Containerization 的测试基于
+6.14.9；用 GNU `ld` 链接的 Linux 构建跑 SQLite 比 zig 链接的慢约 12%，原因未知。
+
+## 许可
+
+MIT 或 Apache-2.0，任选其一。
