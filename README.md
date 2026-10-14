@@ -67,8 +67,7 @@ the same Astro generation; it is upstream noise, not a configuration error.
       discovery document; `rg -l champollion.dorian.page` lists them all.
 - [ ] DNS-AID SVCB/HTTPS records in the Cloudflare zone (`_mcp`, `_a2a`,
       `_index` under `_agents`) for the scan to reach its required level.
-- [ ] Optional parity with the reference site: the "Copy page" button
-      (`PageTitle.astro`) and per-page `h1_emoji`.
+- [ ] Optional parity with the reference site: per-page `h1_emoji` in titles.
 - [ ] "Verified:" transcripts for the pages under `start/`: the house rule is
       that every command on those pages was run on a real host before the page
       shipped, and the outputs quoted are the ones that host printed.

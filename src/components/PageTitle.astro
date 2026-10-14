@@ -1,0 +1,417 @@
+---
+const lang = Astro.locals.starlightRoute?.lang ?? 'en';
+
+type Labels = {
+	title: string;
+	copy: string;
+	copyHint: string;
+	view: string;
+	viewHint: string;
+	copied: string;
+	failed: string;
+	menu: string;
+};
+
+const labels: Record<string, Labels> = {
+	en: {
+		title: 'Copy page',
+		copy: 'Copy page',
+		copyHint: 'Markdown for LLMs',
+		view: 'View as Markdown',
+		viewHint: 'Plain text, no HTML',
+		copied: 'Copied',
+		failed: 'Copy failed',
+		menu: 'Copy options',
+	},
+	'zh-CN': {
+		title: '复制页面',
+		copy: '复制页面',
+		copyHint: '供 LLM 使用的 Markdown',
+		view: '以 Markdown 查看',
+		viewHint: '纯文本，没有 HTML',
+		copied: '已复制',
+		failed: '复制失败',
+		menu: '复制选项',
+	},
+};
+
+const t = labels[lang] ?? labels.en;
+
+// Starlight anchors the page title with this id (its `PAGE_TITLE_ID`), and the
+// skip link and "back to top" scroll target both point at it. The constant is
+// not part of the package's public exports, so the value is repeated here.
+const PAGE_TITLE_ID = '_top';
+
+/*
+ * The plain-text twin is keyed by the content path, which is also the only
+ * case-accurate source: Astro lowercases entry ids, so `zh-CN/…` would become
+ * `zh-cn/…`. A directory page keeps its `index` (`/zh-CN/index.txt`), while a
+ * named page drops it (`/start/quickstart.md`).
+ */
+const entryPath = (Astro.locals.starlightRoute?.entry.filePath ?? '')
+	.replace(/^.*?content\/docs\//, '')
+	.replace(/\.(md|mdx)$/, '');
+// Agents follow this link, and a few fetch stacks refuse `text/markdown`, so
+// the visible link points at the `.txt` twin. The `.md` twin stays published
+// and advertised in the document head for clients that want the real type.
+const agentTextUrl = `/${entryPath || 'index'}.txt`;
+---
+
+<div class="ch-page-header">
+	<h1 id={PAGE_TITLE_ID}>{Astro.locals.starlightRoute?.entry.data.title}</h1>
+
+	<div class="ch-copy-page" data-copy-page data-copy-url={agentTextUrl}>
+		<button
+			type="button"
+			class="ch-copy-page__main"
+			data-copy-action
+			data-label-copy={t.copy}
+			data-label-copied={t.copied}
+			data-label-failed={t.failed}
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="16"
+				height="16"
+				viewBox="0 0 18 18"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.5"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true"
+			>
+				<rect x="6.75" y="6.75" width="8.25" height="8.25" rx="2"></rect>
+				<path d="M11.25 6.75V4.5A1.5 1.5 0 0 0 9.75 3h-6A1.5 1.5 0 0 0 2.25 4.5v6a1.5 1.5 0 0 0 1.5 1.5h2.25"
+				></path>
+			</svg>
+			<span data-copy-label>{t.copy}</span>
+		</button>
+
+		<button
+			type="button"
+			class="ch-copy-page__caret"
+			data-copy-menu-toggle
+			aria-haspopup="true"
+			aria-expanded="false"
+			aria-label={t.menu}
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="14"
+				height="14"
+				viewBox="0 0 18 18"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.8"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true"
+			>
+				<path d="M4.5 11.25 9 6.75l4.5 4.5"></path>
+			</svg>
+		</button>
+
+		<div class="ch-copy-menu" data-copy-menu hidden>
+			<button type="button" class="ch-copy-menu__item" data-copy-action>
+				<span class="ch-copy-menu__icon" aria-hidden="true">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="18"
+						height="18"
+						viewBox="0 0 18 18"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.5"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<rect x="6.75" y="6.75" width="8.25" height="8.25" rx="2"></rect>
+						<path d="M11.25 6.75V4.5A1.5 1.5 0 0 0 9.75 3h-6A1.5 1.5 0 0 0 2.25 4.5v6a1.5 1.5 0 0 0 1.5 1.5h2.25"
+						></path>
+					</svg>
+				</span>
+				<span class="ch-copy-menu__text">
+					<span class="ch-copy-menu__title">{t.copy}</span>
+					<span class="ch-copy-menu__hint" aria-hidden="true">{t.copyHint}</span>
+				</span>
+			</button>
+
+			<a class="ch-copy-menu__item" href={agentTextUrl} target="_blank" rel="noreferrer">
+				<span class="ch-copy-menu__icon" aria-hidden="true">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="18"
+						height="18"
+						viewBox="0 0 18 18"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.5"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<rect x="2.25" y="3.75" width="13.5" height="10.5" rx="2"></rect>
+						<path d="M5.25 7.5 3.75 9l1.5 1.5M12.75 7.5 14.25 9l-1.5 1.5M10.5 6l-3 6"></path>
+					</svg>
+				</span>
+				<span class="ch-copy-menu__text">
+					<span class="ch-copy-menu__title">
+						{t.view}
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="12"
+							height="12"
+							viewBox="0 0 18 18"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.8"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true"
+						>
+							<path d="M6.75 3.75h7.5v7.5M14.25 3.75 6 12"></path>
+						</svg>
+					</span>
+					<span class="ch-copy-menu__hint" aria-hidden="true">{t.viewHint}</span>
+				</span>
+			</a>
+		</div>
+	</div>
+</div>
+
+<style>
+	.ch-page-header {
+		display: flex;
+		align-items: flex-start;
+		gap: 1rem;
+		margin-top: 1rem;
+	}
+
+	.ch-page-header h1 {
+		margin-top: 0;
+		font-size: var(--sl-text-h1);
+		line-height: var(--sl-line-height-headings);
+		/* The same heading treatment as every other h1 on this theme. */
+		font-weight: 700;
+		letter-spacing: -0.009em;
+		color: var(--sl-color-white);
+	}
+
+	/* Split control: copy on the left, menu on the right, one hairline around
+	   both. Values follow the reference: 12px radius, 6px/12px padding, 14px. */
+	.ch-copy-page {
+		position: relative;
+		margin-inline-start: auto;
+		flex-shrink: 0;
+		display: flex;
+		align-items: stretch;
+		block-size: 2.125rem; /* 34px, matching the control this imitates */
+		border: 1px solid var(--sl-color-hairline);
+		border-radius: 0.75rem;
+		background-color: var(--sl-color-bg);
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-sm);
+		font-weight: 500;
+		line-height: 1.2;
+	}
+
+	.ch-copy-page button {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		background: none;
+		border: 0;
+		color: inherit;
+		font: inherit;
+		cursor: pointer;
+	}
+
+	.ch-copy-page__main {
+		padding: 0.375rem 0.75rem;
+		border-start-start-radius: 0.75rem;
+		border-end-start-radius: 0.75rem;
+	}
+
+	.ch-copy-page__caret {
+		inline-size: 2.125rem;
+		padding: 0;
+		justify-content: center;
+		border-inline-start: 1px solid var(--sl-color-hairline);
+		border-start-end-radius: 0.75rem;
+		border-end-end-radius: 0.75rem;
+	}
+
+	.ch-copy-page__caret svg {
+		inline-size: 0.75rem;
+		block-size: 0.75rem;
+	}
+
+	.ch-copy-page button:hover,
+	.ch-copy-menu__item:hover {
+		background-color: color-mix(in oklab, var(--sl-color-gray-2) 5%, transparent);
+	}
+
+	.ch-copy-page[data-state='copied'] {
+		color: var(--sl-color-white);
+	}
+
+	.ch-copy-menu {
+		position: absolute;
+		inset-block-start: calc(100% + 0.5rem);
+		inset-inline-end: 0;
+		z-index: 20;
+		display: grid;
+		gap: 0.25rem;
+		min-inline-size: 20rem;
+		padding: 0.5rem;
+		border: 1px solid var(--sl-color-hairline);
+		border-radius: 1rem;
+		background-color: var(--sl-color-bg);
+		box-shadow: 0 16px 32px -12px rgb(14 18 27 / 0.18);
+		text-align: start;
+	}
+
+	.ch-copy-menu[hidden] {
+		display: none;
+	}
+
+	.ch-copy-menu__item {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.625rem 0.75rem;
+		border-radius: 0.75rem;
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.ch-copy-menu__icon {
+		display: grid;
+		place-items: center;
+		inline-size: 2.5rem;
+		block-size: 2.5rem;
+		border: 1px solid var(--sl-color-hairline);
+		border-radius: 0.625rem;
+		background-color: var(--sl-color-gray-7, var(--sl-color-bg));
+		color: var(--sl-color-white);
+	}
+
+	.ch-copy-menu__text {
+		display: grid;
+		gap: 0.125rem;
+	}
+
+	.ch-copy-menu__title {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		font-weight: 600;
+		color: var(--sl-color-white);
+	}
+
+	.ch-copy-menu__hint {
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-3);
+	}
+
+	@media (max-width: 40rem) {
+		.ch-copy-page {
+			display: none;
+		}
+	}
+</style>
+
+<script>
+	/**
+	 * The async clipboard API needs a secure context and permission. Embedded
+	 * browsers and plain-HTTP previews often refuse both, so the deprecated
+	 * `execCommand` path stays as a fallback rather than leaving the button
+	 * silently doing nothing.
+	 */
+	async function writeToClipboard(text: string): Promise<boolean> {
+		if (navigator.clipboard?.writeText) {
+			try {
+				await navigator.clipboard.writeText(text);
+				return true;
+			} catch {
+				/* fall through to the textarea path */
+			}
+		}
+
+		const area = document.createElement('textarea');
+		area.value = text;
+		area.setAttribute('readonly', '');
+		area.style.position = 'fixed';
+		area.style.top = '-1000px';
+		document.body.append(area);
+		area.select();
+		let copied = false;
+		try {
+			copied = document.execCommand('copy');
+		} catch {
+			copied = false;
+		}
+		area.remove();
+		return copied;
+	}
+
+	function setupCopyPage(root: HTMLElement) {
+		const url = root.dataset.copyUrl ?? '';
+		const toggle = root.querySelector<HTMLButtonElement>('[data-copy-menu-toggle]');
+		const menu = root.querySelector<HTMLElement>('[data-copy-menu]');
+		const primary = root.querySelector<HTMLButtonElement>('.ch-copy-page__main');
+		const label = primary?.querySelector<HTMLElement>('[data-copy-label]');
+
+		const setLabel = (state: 'idle' | 'copied' | 'failed') => {
+			root.dataset.state = state;
+			if (!label) return;
+			label.textContent =
+				state === 'copied'
+					? (primary?.dataset.labelCopied ?? 'Copied')
+					: state === 'failed'
+						? (primary?.dataset.labelFailed ?? 'Copy failed')
+						: (primary?.dataset.labelCopy ?? 'Copy page');
+		};
+
+		const closeMenu = () => {
+			if (!menu) return;
+			menu.hidden = true;
+			toggle?.setAttribute('aria-expanded', 'false');
+		};
+
+		const copy = async () => {
+			try {
+				const response = await fetch(url);
+				if (!response.ok) throw new Error(String(response.status));
+				setLabel((await writeToClipboard(await response.text())) ? 'copied' : 'failed');
+			} catch {
+				setLabel('failed');
+			}
+			window.setTimeout(() => setLabel('idle'), 2000);
+		};
+
+		root.querySelectorAll<HTMLElement>('[data-copy-action]').forEach((action) => {
+			action.addEventListener('click', () => {
+				void copy();
+				closeMenu();
+			});
+		});
+
+		toggle?.addEventListener('click', () => {
+			if (!menu) return;
+			const open = menu.hidden;
+			menu.hidden = !open;
+			toggle.setAttribute('aria-expanded', String(open));
+		});
+
+		document.addEventListener('click', (event) => {
+			if (!root.contains(event.target as Node)) closeMenu();
+		});
+
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape') closeMenu();
+		});
+	}
+
+	document.querySelectorAll<HTMLElement>('[data-copy-page]').forEach(setupCopyPage);
+</script>

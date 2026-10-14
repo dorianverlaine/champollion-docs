@@ -49,6 +49,8 @@ export default defineConfig({
 				Head: './src/components/Head.astro',
 				// The Rosetta-stone wordmark carved with the hello binary.
 				SiteTitle: './src/components/SiteTitle.astro',
+				// Adds the "Copy page" action next to the page title.
+				PageTitle: './src/components/PageTitle.astro',
 				// The language picker as a menu rather than a native select.
 				LanguageSelect: './src/components/LanguageSelect.astro',
 				// The theme picker as a menu rather than a native select.
