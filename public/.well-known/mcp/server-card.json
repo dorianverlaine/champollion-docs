@@ -1,0 +1,35 @@
+{
+  "serverInfo": {
+    "name": "champollion-docs",
+    "title": "Champollion documentation",
+    "version": "0.1.0"
+  },
+  "description": "Search the Champollion documentation and read any page as Markdown. Champollion is a user-mode RISC-V (RV64GC) Linux binary translator for macOS arm64.",
+  "endpoint": "https://champollion.dorian.page/mcp",
+  "transport": {
+    "type": "streamable-http",
+    "url": "https://champollion.dorian.page/mcp"
+  },
+  "protocolVersion": "2025-06-18",
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    },
+    "resources": {},
+    "prompts": {}
+  },
+  "tools": [
+    {
+      "name": "search_docs",
+      "description": "Full-text search over the Champollion documentation."
+    },
+    {
+      "name": "read_page",
+      "description": "Read one documentation page as Markdown."
+    },
+    {
+      "name": "list_pages",
+      "description": "List every published page with its path and title."
+    }
+  ]
+}

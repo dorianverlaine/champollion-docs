@@ -29,11 +29,17 @@ export default defineConfig({
 			description:
 				'Documentation for Champollion, a user-mode RISC-V (RV64GC) Linux binary translator for macOS arm64.',
 			customCss: ['./src/styles/theme.css'],
+			// WebMCP tools for browsers that expose `navigator.modelContext`.
+			// The script itself feature-detects and does nothing elsewhere.
+			head: [{ tag: 'script', attrs: { src: '/webmcp.js', type: 'module' } }],
 			// The injected `/404` route renders the `404` entry from the content
 			// collection; with the entry present, the two routes collide and the
 			// build warns about it. Let the content route serve `/404` instead.
 			disable404Route: true,
 			components: {
+				// Adds rel="alternate" links for the .txt and .md twins of each
+				// page, and keeps only one table of contents in the DOM.
+				Head: './src/components/Head.astro',
 				// Theme and language pickers as menus rather than native selects.
 				LanguageSelect: './src/components/LanguageSelect.astro',
 			},

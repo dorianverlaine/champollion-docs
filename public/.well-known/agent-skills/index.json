@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "run-champollion",
+      "type": "skill-md",
+      "description": "Build rvrun from source and run a riscv64 Linux program under it on an Apple silicon Mac.",
+      "url": "/.well-known/agent-skills/run-champollion/SKILL.md",
+      "digest": "sha256:6faad0e9bbca825a5c9488810f3aefa553304f4da5f84f57cedbb92ed7c974a6"
+    }
+  ]
+}

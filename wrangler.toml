@@ -3,7 +3,9 @@
 # as static assets and `worker/index.js` as the small script in front of them.
 name = "champollion-docs"
 main = "worker/index.js"
-compatibility_date = "2026-10-14"
+# One day behind the calendar on purpose: `wrangler dev`'s bundled workerd
+# refuses dates newer than its own build.
+compatibility_date = "2026-10-13"
 
 # 🔀 Custom domains go here once the hostname's DNS lives in the same
 # Cloudflare account as this Worker. `wrangler deploy` makes the Worker's custom

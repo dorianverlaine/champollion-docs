@@ -1,0 +1,25 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://champollion.dorian.page/",
+      "service-doc": [
+        {
+          "href": "https://champollion.dorian.page/",
+          "type": "text/html"
+        }
+      ],
+      "service-desc": [
+        {
+          "href": "https://champollion.dorian.page/openapi.json",
+          "type": "application/openapi+json"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://champollion.dorian.page/",
+          "type": "text/html"
+        }
+      ]
+    }
+  ]
+}
