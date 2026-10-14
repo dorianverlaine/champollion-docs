@@ -8,14 +8,14 @@
  * in a commit message let a regression land unnoticed, so this script runs the
  * same scan and fails on any result the repository does not expect.
  *
- * Usage: pnpm scan:agents [url]        (default https://champollion.dorian.page)
+ * Usage: pnpm scan:agents [url]        (default https://champollion.aqeo.dev)
  *
  * Exit codes: 0 the site is at the required level with only the documented
  * failures, 1 a check regressed or the level dropped, 2 the scan itself could
  * not be reached.
  */
 
-const SITE = process.argv[2] ?? 'https://champollion.dorian.page';
+const SITE = process.argv[2] ?? 'https://champollion.aqeo.dev';
 const ENDPOINT = 'https://isitagentready.com/api/scan';
 const REQUIRED_LEVEL = 5;
 

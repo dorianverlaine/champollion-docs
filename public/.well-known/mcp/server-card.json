@@ -5,10 +5,10 @@
     "version": "0.1.0"
   },
   "description": "Search the Champollion documentation and read any page as Markdown. Champollion is a user-mode RISC-V (RV64GC) Linux binary translator for macOS arm64.",
-  "endpoint": "https://champollion.dorian.page/mcp",
+  "endpoint": "https://champollion.aqeo.dev/mcp",
   "transport": {
     "type": "streamable-http",
-    "url": "https://champollion.dorian.page/mcp"
+    "url": "https://champollion.aqeo.dev/mcp"
   },
   "protocolVersion": "2025-06-18",
   "capabilities": {

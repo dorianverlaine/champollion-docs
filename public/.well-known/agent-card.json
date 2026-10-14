@@ -2,12 +2,12 @@
   "protocolVersion": "0.3.0",
   "name": "Champollion documentation lookup",
   "description": "Answers questions about Champollion, the user-mode RISC-V (RV64GC) Linux binary translator for macOS arm64, by searching this documentation site and returning the matching pages with their Markdown URLs. It retrieves; it does not generate prose.",
-  "url": "https://champollion.dorian.page/a2a",
+  "url": "https://champollion.aqeo.dev/a2a",
   "preferredTransport": "JSONRPC",
   "version": "0.1.0",
   "supportedInterfaces": [
     {
-      "url": "https://champollion.dorian.page/a2a",
+      "url": "https://champollion.aqeo.dev/a2a",
       "protocolBinding": "JSONRPC",
       "protocolVersion": "0.3.0"
     }

@@ -54,5 +54,5 @@ real program against a riscv64 userland.
 
 ## Source
 
-- <https://champollion.dorian.page/start/getting-started.md>
-- <https://champollion.dorian.page/reference/cli.md>
+- <https://champollion.aqeo.dev/start/getting-started.md>
+- <https://champollion.aqeo.dev/reference/cli.md>

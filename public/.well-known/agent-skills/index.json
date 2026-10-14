@@ -6,7 +6,7 @@
       "type": "skill-md",
       "description": "Build rvrun from source and run a riscv64 Linux program under it on an Apple silicon Mac.",
       "url": "/.well-known/agent-skills/run-champollion/SKILL.md",
-      "digest": "sha256:6faad0e9bbca825a5c9488810f3aefa553304f4da5f84f57cedbb92ed7c974a6"
+      "digest": "sha256:f91833752002fc21520b11c66183bb85f5ccf54acd9657ca3df2c00edaf93544"
     }
   ]
 }

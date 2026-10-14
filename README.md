@@ -62,9 +62,8 @@ the same Astro generation; it is upstream noise, not a configuration error.
 
 ## Before this can ship
 
-- [ ] Real domain. The placeholder `champollion.dorian.page` is written into
-      `astro.config.mjs`, `wrangler.toml` (the commented `routes`), and every
-      discovery document; `rg -l champollion.dorian.page` lists them all.
+- [x] Real domain: `champollion.aqeo.dev`, written into `astro.config.mjs`,
+      `wrangler.toml` (the `routes` list), and every discovery document.
 - [ ] DNS-AID SVCB/HTTPS records in the Cloudflare zone (`_mcp`, `_a2a`,
       `_index` under `_agents`) for the scan to reach its required level.
 - [ ] Optional parity with the reference site: per-page `h1_emoji` in titles.

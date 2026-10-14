@@ -1,22 +1,22 @@
 {
   "linkset": [
     {
-      "anchor": "https://champollion.dorian.page/",
+      "anchor": "https://champollion.aqeo.dev/",
       "service-doc": [
         {
-          "href": "https://champollion.dorian.page/",
+          "href": "https://champollion.aqeo.dev/",
           "type": "text/html"
         }
       ],
       "service-desc": [
         {
-          "href": "https://champollion.dorian.page/openapi.json",
+          "href": "https://champollion.aqeo.dev/openapi.json",
           "type": "application/openapi+json"
         }
       ],
       "status": [
         {
-          "href": "https://champollion.dorian.page/",
+          "href": "https://champollion.aqeo.dev/",
           "type": "text/html"
         }
       ]

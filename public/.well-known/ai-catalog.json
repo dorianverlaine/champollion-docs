@@ -2,15 +2,15 @@
   "specVersion": "1.0",
   "host": {
     "displayName": "Champollion documentation",
-    "identifier": "did:web:champollion.dorian.page"
+    "identifier": "did:web:champollion.aqeo.dev"
   },
   "entries": [
     {
-      "identifier": "urn:air:champollion.dorian.page:server:docs-mcp",
+      "identifier": "urn:air:champollion.aqeo.dev:server:docs-mcp",
       "displayName": "Champollion documentation MCP server",
       "description": "Streamable HTTP MCP server that searches the documentation and returns any page as Markdown.",
       "type": "application/mcp-server-card+json",
-      "url": "https://champollion.dorian.page/.well-known/mcp/server-card.json",
+      "url": "https://champollion.aqeo.dev/.well-known/mcp/server-card.json",
       "representativeQueries": [
         "how do I run a riscv64 binary on macOS",
         "what does the rvrun sysroot option do",
@@ -18,11 +18,11 @@
       ]
     },
     {
-      "identifier": "urn:air:champollion.dorian.page:agent:docs-lookup",
+      "identifier": "urn:air:champollion.aqeo.dev:agent:docs-lookup",
       "displayName": "Champollion documentation lookup agent",
       "description": "A2A agent that answers documentation questions with page links and excerpts.",
       "type": "application/a2a-agent-card+json",
-      "url": "https://champollion.dorian.page/.well-known/agent-card.json",
+      "url": "https://champollion.aqeo.dev/.well-known/agent-card.json",
       "representativeQueries": [
         "what is champollion",
         "how does the jit translate blocks",
@@ -30,11 +30,11 @@
       ]
     },
     {
-      "identifier": "urn:air:champollion.dorian.page:skills:documentation",
+      "identifier": "urn:air:champollion.aqeo.dev:skills:documentation",
       "displayName": "Champollion documentation skills",
       "description": "Agent skills for building rvrun and running riscv64 programs with it.",
       "type": "application/json",
-      "url": "https://champollion.dorian.page/.well-known/agent-skills/index.json",
+      "url": "https://champollion.aqeo.dev/.well-known/agent-skills/index.json",
       "representativeQueries": [
         "build rvrun skill",
         "run a riscv64 program skill"

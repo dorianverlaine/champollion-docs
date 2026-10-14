@@ -18,11 +18,11 @@ const sitemapAlias = {
 };
 
 // `site` is the origin used in canonical URLs and the sitemap. It has to match
-// the domain the Worker is bound to. ⚠️ `champollion.dorian.page` is a
+// the domain the Worker is bound to. ⚠️ `champollion.aqeo.dev` is a
 // placeholder: change it here and add the hostname to `routes` in
 // `wrangler.toml` before the first real deployment.
 export default defineConfig({
-	site: 'https://champollion.dorian.page',
+	site: 'https://champollion.aqeo.dev',
 	// The concept page moved from `routes` to `modes` when route A and route B
 	// were renamed for readers; the old URLs keep working as static redirects.
 	redirects: {
@@ -81,7 +81,7 @@ export default defineConfig({
 				'zh-CN': { label: '简体中文', lang: 'zh-CN' },
 			},
 			editLink: {
-				baseUrl: 'https://github.com/dorian-zhao/champollion-docs/edit/main/',
+				baseUrl: 'https://github.com/dorianverlaine/champollion-docs/edit/main/',
 			},
 			sidebar: [
 				{

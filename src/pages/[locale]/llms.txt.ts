@@ -14,7 +14,7 @@ export const getStaticPaths = localePaths;
 
 export const GET: APIRoute = async ({ site, params }) => {
 	const docs = await getCollection('docs');
-	const origin = site ?? new URL('https://champollion.dorian.page');
+	const origin = site ?? new URL('https://champollion.aqeo.dev');
 	const locale = params.locale as Locale;
 	return new Response(llmsIndex(origin, docs, locale), { headers: llmsHeaders });
 };

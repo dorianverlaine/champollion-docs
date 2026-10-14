@@ -17,8 +17,8 @@ User-agent: CCBot
 Allow: /
 Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
-Sitemap: https://champollion.dorian.page/sitemap.xml
+Sitemap: https://champollion.aqeo.dev/sitemap.xml
 
 # Agentic Resource Discovery: the same answer as
 # /.well-known/ai-catalog.json, for crawlers that read it from here.
-Agentmap: https://champollion.dorian.page/.well-known/ai-catalog.json
+Agentmap: https://champollion.aqeo.dev/.well-known/ai-catalog.json

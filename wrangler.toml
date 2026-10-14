@@ -7,15 +7,14 @@ main = "worker/index.js"
 # refuses dates newer than its own build.
 compatibility_date = "2026-10-13"
 
-# 🔀 Custom domains go here once the hostname's DNS lives in the same
-# Cloudflare account as this Worker. `wrangler deploy` makes the Worker's custom
-# domains match this list: a hostname bound only in the dashboard is detached,
-# DNS record and all, by the next deploy, so every hostname belongs here before
-# it is bound anywhere else.
-#
-# routes = [
-# 	{ pattern = "champollion.dorian.page", custom_domain = true },
-# ]
+# 🔀 `wrangler deploy` makes the Worker's custom domains match this list: a
+# hostname bound only in the dashboard is detached, DNS record and all, by the
+# next deploy, so every hostname belongs here before it is bound anywhere else.
+# The aqeo.dev zone lives in the same account, so wrangler creates the DNS
+# record and the certificate on the first deploy.
+routes = [
+	{ pattern = "champollion.aqeo.dev", custom_domain = true },
+]
 
 [assets]
 directory = "./dist"

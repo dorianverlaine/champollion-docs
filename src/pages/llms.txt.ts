@@ -12,6 +12,6 @@ export const prerender = true;
  */
 export const GET: APIRoute = async ({ site }) => {
 	const docs = await getCollection('docs');
-	const origin = site ?? new URL('https://champollion.dorian.page');
+	const origin = site ?? new URL('https://champollion.aqeo.dev');
 	return new Response(llmsIndex(origin, docs, null), { headers: llmsHeaders });
 };

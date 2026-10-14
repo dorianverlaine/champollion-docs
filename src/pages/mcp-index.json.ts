@@ -48,7 +48,7 @@ export const GET: APIRoute = async ({ site }) => {
 	return new Response(
 		JSON.stringify(
 			{
-				origin: site?.origin ?? 'https://champollion.dorian.page',
+				origin: site?.origin ?? 'https://champollion.aqeo.dev',
 				generatedFrom: 'src/content/docs',
 				pages,
 			},
