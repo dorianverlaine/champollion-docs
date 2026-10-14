@@ -46,10 +46,14 @@ export default defineConfig({
 				// Adds rel="alternate" links for the .txt and .md twins of each
 				// page, and keeps only one table of contents in the DOM.
 				Head: './src/components/Head.astro',
-				// Theme and language pickers as menus rather than native selects.
+				// The language picker as a menu rather than a native select.
 				LanguageSelect: './src/components/LanguageSelect.astro',
+				// The theme picker as a menu rather than a native select.
+				ThemeSelect: './src/components/ThemeSelect.astro',
 				// Previous/next as a line of links rather than two large cards.
 				Pagination: './src/components/Pagination.astro',
+				// Adds the project footer below the edit row and pagination.
+				Footer: './src/components/Footer.astro',
 			},
 			// The same pair the reference site uses, so syntax colors match.
 			expressiveCode: {

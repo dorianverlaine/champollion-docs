@@ -1,0 +1,248 @@
+---
+import EditLink from 'virtual:starlight/components/EditLink';
+import LastUpdated from 'virtual:starlight/components/LastUpdated';
+import Pagination from 'virtual:starlight/components/Pagination';
+
+/*
+ * Starlight's footer holds the edit link, the last-updated stamp, and the
+ * previous/next links. This replacement keeps those and adds the site's own
+ * footer below, laid out like the reference's: columns of small muted links
+ * over a rule, with a copyright line underneath.
+ *
+ * Its styles are local rather than inherited. Overriding the component means
+ * Starlight's own scoped `footer` rules no longer apply, which is what put the
+ * edit row and this block on one line.
+ */
+const repository = 'https://github.com/dorian-zhao/champollion';
+const year = new Date().getFullYear();
+
+const lang = Astro.locals.starlightRoute?.lang ?? 'en';
+const locale = Astro.locals.starlightRoute?.locale;
+const prefix = locale && locale !== 'root' ? `/${locale}` : '';
+
+const strings: Record<string, Record<string, string>> = {
+	en: {
+		project: 'Project',
+		docs: 'Documentation',
+		designBrief: 'Design brief',
+		issues: 'Issues',
+		gettingStarted: 'Getting started',
+		modes: 'Direct mode and VM mode',
+		cli: 'CLI reference',
+		status: 'Project status',
+		legal: 'is licensed under MIT or Apache-2.0.',
+	},
+	'zh-CN': {
+		project: '项目',
+		docs: '文档',
+		designBrief: '设计文档',
+		issues: 'Issues',
+		gettingStarted: '快速开始',
+		modes: '直接模式与 VM 模式',
+		cli: 'CLI 参考',
+		status: '项目状态',
+		legal: '以 MIT 或 Apache-2.0 授权。',
+	},
+};
+
+const t = strings[lang] ?? strings.en;
+
+const columns = [
+	{
+		heading: t.project,
+		links: [
+			{ label: 'GitHub', href: repository },
+			{ label: t.designBrief, href: `${repository}/blob/main/docs/design.md` },
+			{ label: t.issues, href: `${repository}/issues` },
+		],
+	},
+	{
+		heading: t.docs,
+		links: [
+			{ label: t.gettingStarted, href: `${prefix}/start/getting-started/` },
+			{ label: t.modes, href: `${prefix}/concepts/modes/` },
+			{ label: t.cli, href: `${prefix}/reference/cli/` },
+			{ label: t.status, href: `${prefix}/project/status/` },
+		],
+	},
+];
+---
+
+<footer class="ch-footer-root">
+	<div class="meta">
+		<EditLink />
+		<LastUpdated />
+	</div>
+
+	<Pagination />
+
+	<div class="ch-footer">
+		<div class="ch-footer__columns">
+			<div class="ch-footer__brand">
+				<p class="ch-footer__wordmark">Champollion</p>
+			</div>
+
+			{
+				columns.map((column) => (
+					<nav class="ch-footer__column" aria-label={column.heading}>
+						<h2 class="ch-footer__heading">{column.heading}</h2>
+						<ul>
+							{column.links.map((link) => (
+								<li>
+									<a href={link.href}>{link.label}</a>
+								</li>
+							))}
+						</ul>
+					</nav>
+				))
+			}
+		</div>
+
+		<div class="ch-footer__legal">
+			<p class="ch-footer__copy">
+				<span>© {year} Dorian Zhao</span>
+				{/* An icon rather than the address as text: the mailto and the
+				    accessible name still carry it. */}
+				<a class="ch-footer__mail" href="mailto:me@dorian.page" aria-label="me@dorian.page">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="16"
+						height="16"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.6"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true"
+					>
+						<rect x="2.5" y="4.5" width="19" height="15" rx="2.5"></rect>
+						<path d="m3.5 7.5 8.5 5.5 8.5-5.5"></path>
+					</svg>
+				</a>
+			</p>
+			<p>
+				<a href={repository}>Champollion</a> {t.legal}
+			</p>
+		</div>
+	</div>
+</footer>
+
+<style>
+	.ch-footer-root {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	/* The edit link and last-updated stamp, as Starlight lays them out. */
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 0.75rem 3rem;
+		margin-top: 3rem;
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-3);
+	}
+
+	.ch-footer {
+		margin-top: 2.5rem;
+		padding-top: 2.5rem;
+		border-top: 1px solid var(--sl-color-hairline);
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-3);
+	}
+
+	.ch-footer__columns {
+		display: grid;
+		/* Wraps by itself: three columns when there is room, two, then one. */
+		grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+		gap: 2rem;
+	}
+
+	.ch-footer__brand {
+		grid-column: 1 / -1;
+	}
+
+	@media (min-width: 45rem) {
+		.ch-footer__brand {
+			grid-column: span 1;
+		}
+
+		.ch-footer__columns {
+			grid-template-columns: minmax(14rem, 1fr) repeat(2, minmax(9rem, 12rem));
+		}
+	}
+
+	.ch-footer__wordmark {
+		margin: 0;
+		font-size: var(--sl-text-xl);
+		font-weight: 600;
+		letter-spacing: -0.01em;
+		color: var(--sl-color-white);
+	}
+
+	.ch-footer__heading {
+		margin: 0 0 0.75rem;
+		font-family: var(--sl-font);
+		font-size: var(--sl-text-sm);
+		font-weight: 600;
+		letter-spacing: 0;
+		color: var(--sl-color-white);
+	}
+
+	.ch-footer__column ul {
+		display: grid;
+		gap: 0.5rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.ch-footer__legal {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 0.5rem 2rem;
+		margin-top: 2.5rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--sl-color-hairline);
+	}
+
+	.ch-footer__legal p {
+		margin: 0;
+		min-inline-size: 0;
+	}
+
+	/* The address sits under the name rather than beside it. */
+	.ch-footer__copy {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.ch-footer__mail {
+		display: grid;
+		place-items: center;
+		inline-size: 1.5rem;
+		block-size: 1.5rem;
+		border-radius: 0.375rem;
+	}
+
+	.ch-footer__mail:hover {
+		background-color: color-mix(in oklab, var(--sl-color-gray-2) 8%, transparent);
+		text-decoration: none;
+	}
+
+	.ch-footer a {
+		color: var(--sl-color-gray-3);
+		text-decoration: none;
+	}
+
+	.ch-footer a:hover {
+		color: var(--sl-color-white);
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+</style>
