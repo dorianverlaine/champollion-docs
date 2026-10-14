@@ -14,14 +14,12 @@ hero:
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
+import TranslationCard from '../../../components/TranslationCard.astro';
 
 Champollion 是一个用户态的 RISC-V（RV64GC）Linux 二进制翻译器。程序以普通宿主进程的身份运行：
 不会启动虚拟机，也没有客户机内核；程序发起的 Linux 系统调用由翻译器处理，无法处理的则转发给宿主。
 
-```console
-$ rvrun tests/fixtures/hello
-hello from riscv64
-```
+<TranslationCard />
 
 ## 从这里开始
 
