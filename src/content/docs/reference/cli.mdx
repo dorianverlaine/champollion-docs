@@ -1,0 +1,37 @@
+---
+title: CLI reference
+description: The rvrun command line — -g, -L, and -0 — plus the RVRUN_* environment variables that trace, profile, and cache the guest.
+---
+
+## Usage
+
+```console
+$ rvrun [-g PORT] [-L SYSROOT] [-0 ARGV0] <riscv64-linux-elf or #! script> [args...]
+```
+
+The program may be a path or a name found on `$PATH`; everything after it
+belongs to the guest. A script whose `#!` names a riscv64 interpreter is run by
+starting that interpreter.
+
+## Options
+
+- `-g PORT` — wait for a GDB remote connection on `127.0.0.1:PORT` before
+  running, with the guest stopped at its entry point, like `qemu-riscv64 -g`.
+  Port 0 picks a free port and prints it.
+- `-L SYSROOT` — resolve the guest's absolute paths (its dynamic loader,
+  libraries, `/etc` files) under SYSROOT first, like `qemu-riscv64 -L`; also
+  `RVRUN_SYSROOT`.
+- `-0 ARGV0` — pass ARGV0 as the guest's `argv[0]` instead of the path, used
+  when a guest `execve` starts a new `rvrun`.
+
+## Environment variables
+
+- `RVRUN_STRACE=1` — trace every syscall to stderr.
+- `RVRUN_STATS=1` — print instructions retired and execution speed on exit.
+- `RVRUN_JIT=0` — run on the caching interpreter instead of the JIT.
+- `RVRUN_PROF=FILE` — sample generated code and write a report of the hottest
+  blocks to FILE; render it with `tools/jitprof.py FILE`.
+- `RVRUN_CACHE=0` — disable the persistent code cache. Translations are
+  otherwise saved per executable in `~/Library/Caches/champollion` (on Linux
+  `$XDG_CACHE_HOME/champollion` or `~/.cache/champollion`), or where
+  `$RVRUN_CACHE_DIR` points.

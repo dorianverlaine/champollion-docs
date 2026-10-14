@@ -1,0 +1,51 @@
+---
+title: How translation works
+description: What happens between loading a riscv64 ELF and executing its syscalls — guest memory, the reference interpreter, the JIT, and host dispatch.
+---
+
+## A process, not a machine
+
+Champollion is user-mode only. A guest program is not a simulated machine; it
+is the host process itself. `rvrun` loads the ELF, maps its segments into a
+reserved guest address space, and starts executing at its entry point. When the
+program asks the kernel for something, the request is served by the runtime —
+implemented in Rust when it can be, translated to the host when it cannot.
+
+## From file to first instruction
+
+The loader parses the ELF, maps its segments into guest memory (a 256 GiB
+reservation; on macOS a guest address is a fixed offset into it, on arm64 Linux
+guest addresses are host addresses), builds the initial Linux stack, and
+relocates static-PIE images. When the program is dynamically linked, its
+`PT_INTERP` — musl's `ld-musl-riscv64.so.1` — runs first, resolved against the
+sysroot passed with `-L`.
+
+## Two engines, one oracle
+
+The interpreter fetches and decodes every instruction it executes, and it is
+the permanent oracle: the other engines are diffed against it rather than
+trusted. The fast engine keeps a cache of decoded blocks, chained to their last
+two successors, plus a per-thread software TLB over the guest's 4 KiB pages.
+The cache is dropped when memory mappings change or the guest runs `fence.i`.
+
+The `riscv-tests` suite runs the fast engine and the JIT against the
+interpreter and requires identical state at the end of every case.
+
+## The JIT
+
+Blocks are translated to arm64 by a hand-written encoder whose output is
+checked against the assembler in tests. Generated code keeps guest addresses
+masked into the reservation and reaches translated successors through a jump
+cache. Translated blocks are saved per executable in a persistent cache
+(`~/Library/Caches/champollion` by default), so the second run of a program
+starts translated; `RVRUN_CACHE=0` turns that off, and `RVRUN_JIT=0` drops
+back to the interpreter.
+
+## Syscalls and signals
+
+Guest syscalls use the Linux ABI. Some are served by the runtime itself
+(`mmap`, `brk`, and friends); the rest cross a small `HostOs` interface. Its
+macOS backend translates the differences — `open` flag bits, errno values,
+signals, `flock` — and its Linux backend passes calls straight to the kernel,
+identity address space included. Errors come back as Linux errno values either
+way, and a host thread pumps signals into the guest.

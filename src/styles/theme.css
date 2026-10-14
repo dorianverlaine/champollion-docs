@@ -1,0 +1,705 @@
+/*
+ * Typography, colour, and layout.
+ *
+ * The values follow the documentation design the project takes as its
+ * reference, measured from that site rather than guessed: a warm humanist
+ * grotesk for body text, a serif display face for h1 and h2 at regular weight,
+ * a typewriter-adjacent monospace for code, a neutral grey ramp rather than a
+ * blue-grey one, near-black text and links instead of a coloured accent,
+ * hairline borders, and a page container that stops growing at 92rem.
+ *
+ * The light palette is Apple's documentation white rather than the reference's
+ * warm off-white: a pure white page (#ffffff), #1d1d1f ink, #d2d2d7/#e8e8ed
+ * hairlines, and #f5f5f7 for filled surfaces such as inline code.
+ *
+ * The faces are the ones this project uses elsewhere: Literata for display,
+ * Inter for text, JetBrains Mono for code. The reference's own faces are not
+ * published, so they are not borrowable.
+ *
+ * Latin glyphs come from Inter; Chinese glyphs fall through to the platform's
+ * CJK font, because shipping a CJK webfont costs megabytes for text the reader
+ * already has.
+ */
+@import '@fontsource-variable/literata';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+
+/* Dark mode is Starlight's default theme. */
+:root {
+	--sl-font:
+		/*
+		 * The colour emoji fonts sit directly after the Latin face and before the
+		 * CJK ones on purpose. A CJK font also carries monochrome symbol glyphs
+		 * for codepoints such as ✍ and ⚙, so with the emoji fonts at the end of
+		 * the stack those marks were drawn as flat text glyphs instead of emoji —
+		 * which is what looked low-resolution.
+		 */
+		'Inter Variable', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', -apple-system,
+		BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif, 'PingFang TC', 'PingFang SC',
+		'Hiragino Sans', 'Noto Sans TC', 'Noto Sans SC', 'Noto Sans CJK TC', 'Noto Sans CJK SC',
+		'Microsoft JhengHei', 'Microsoft YaHei';
+	--sl-font-mono:
+		'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+		'Liberation Mono', 'Courier New', 'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei',
+		monospace;
+	--ch-font-serif:
+		'Literata Variable', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Iowan Old Style',
+		'Songti TC', 'Songti SC', 'LiSong Pro', 'Noto Serif TC', 'Noto Serif SC', 'Hiragino Mincho ProN',
+		'Yu Mincho', 'Noto Serif JP', Georgia, 'Times New Roman', Times, serif;
+
+	/* Type scale: 16px body, 30-36px page title. */
+	--sl-text-xs: 0.8125rem; /* 13px */
+	--sl-text-sm: 0.875rem; /* 14px */
+	--sl-text-base: 1rem; /* 16px */
+	--sl-text-lg: 1.0625rem; /* 17px */
+	--sl-text-xl: 1.1875rem; /* 19px */
+	--sl-text-2xl: 1.375rem; /* 22px */
+	--sl-text-3xl: 1.625rem; /* 26px */
+	--sl-text-4xl: 1.875rem; /* 30px */
+	--sl-text-5xl: 2.25rem; /* 36px */
+	--sl-line-height: 1.65;
+	--sl-line-height-headings: 1.15;
+
+	/*
+	 * Heading sizes, taken from the reference: 36 / 24 / 20 / 18. Starlight
+	 * raises these tokens again at 50em, so the values are repeated inside that
+	 * breakpoint rather than only here.
+	 */
+	--sl-text-h2: 1.5rem; /* 24px */
+	--sl-text-h3: 1.25rem; /* 20px */
+	--sl-text-h4: 1.125rem; /* 18px */
+	--sl-text-h5: 1rem;
+
+	/* Layout: 18rem sidebar, 48rem measure, 92rem container. */
+	--sl-sidebar-width: 18rem;
+	--sl-content-width: 48rem;
+	--sl-nav-height: 4rem;
+	--sl-content-gap-y: 1.5rem;
+
+	/* Colours (dark). The ramp is the reference's: 50 #f3f3f3 … 950 #0a0a0a. */
+	--sl-color-white: #ffffff;
+	--sl-color-gray-1: #f3f3f3;
+	--sl-color-gray-2: #cecece;
+	--sl-color-gray-3: #9e9e9e;
+	--sl-color-gray-4: #707070;
+	--sl-color-gray-5: #252525;
+	--sl-color-gray-6: #171717;
+	--sl-color-black: #09090b;
+
+	--sl-color-bg: #09090b;
+	--sl-color-bg-nav: #09090b;
+	--sl-color-bg-sidebar: #09090b;
+	--sl-color-bg-inline-code: #171717;
+	--sl-color-hairline-light: #252525;
+	--sl-color-hairline: #252525;
+	--sl-color-hairline-shade: #09090b;
+
+	--sl-color-accent-low: #252525;
+	--sl-color-accent: #ffffff;
+	--sl-color-accent-high: #ffffff;
+	--sl-color-text-accent: #ffffff;
+	--sl-color-text: #cecece;
+	--sl-color-text-invert: #09090b;
+	--ch-color-prose: #cecece;
+	--ch-code-bg: #151517;
+	--ch-color-toc: #9e9e9e;
+	--ch-color-toc-heading: #cecece;
+
+	--sl-color-backdrop-overlay: rgb(9 9 11 / 0.66);
+}
+
+@media (min-width: 50em) {
+	:root {
+		--sl-text-h2: 1.5rem;
+		--sl-text-h3: 1.25rem;
+		--sl-text-h4: 1.125rem;
+		--sl-text-h5: 1rem;
+	}
+}
+
+:root[data-theme='light'] {
+	/* Colours (light). The page is Apple's docs white, not a warm off-white:
+	   pure white sheets, near-black ink, a #d2d2d7/#e8e8ed hairline ramp, and
+	   #f5f5f7 fills. */
+	--sl-color-white: #1d1d1f;
+	--sl-color-gray-1: #1d1d1f;
+	--sl-color-gray-2: #424245;
+	--sl-color-gray-3: #6e6e73;
+	--sl-color-gray-4: #86868b;
+	--sl-color-gray-5: #d2d2d7;
+	--sl-color-gray-6: #f5f5f7;
+	--sl-color-gray-7: #fbfbfd;
+	--sl-color-black: #ffffff;
+
+	--sl-color-bg: #ffffff;
+	--sl-color-bg-nav: #ffffff;
+	--sl-color-bg-sidebar: #ffffff;
+	--sl-color-bg-inline-code: #f5f5f7;
+	--sl-color-hairline-light: #f0f0f2;
+	--sl-color-hairline: #e8e8ed;
+	--sl-color-hairline-shade: #e8e8ed;
+
+	--sl-color-accent-low: #f5f5f7;
+	--sl-color-accent: #1d1d1f;
+	--sl-color-accent-high: #1d1d1f;
+	--sl-color-text-accent: #1d1d1f;
+	--sl-color-text: #424245;
+	--sl-color-text-invert: #ffffff;
+	--ch-color-prose: #424245;
+	--ch-code-bg: #ffffff;
+	--ch-color-toc: #6e6e73;
+	--ch-color-toc-heading: #424245;
+
+	--sl-color-backdrop-overlay: rgb(29 29 31 / 0.4);
+}
+
+body {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Every content heading is the display serif, as in the reference. */
+h1,
+h2 {
+	font-family: var(--ch-font-serif);
+	/* Literata's 400 is a touch light at display sizes, and the reference's
+	   serif is set at the same weight it uses for body text. */
+	font-weight: 500;
+	letter-spacing: 0.01em;
+}
+
+.content-panel h1,
+.content-panel h2 {
+	/*
+	 * Playfair's optical-size axis narrows the letterforms at display sizes,
+	 * which reads as horizontally squeezed. Using the text instance keeps the
+	 * proportions the reader expects from a heading.
+	 */
+	font-optical-sizing: none;
+}
+
+.sl-markdown-content h3,
+.sl-markdown-content h4,
+.sl-markdown-content h5 {
+	font-weight: 400;
+	letter-spacing: 0;
+}
+
+/* Content links are underlined, not coloured, so they survive greyscale. */
+.sl-markdown-content a:not(:where(.not-content *)) {
+	color: var(--sl-color-text-accent);
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.2em;
+	text-decoration-color: color-mix(in oklab, currentColor 35%, transparent);
+}
+
+.sl-markdown-content a:not(:where(.not-content *)):hover {
+	text-decoration-color: currentColor;
+}
+
+/*
+ * Code. Block values follow the reference: a 16px rounded frame, 14px code at
+ * 1.7 line height, 14px/16px inner padding, and a hairline border instead of a
+ * shadow. Inline code is a 6px chip with 2px/8px padding and no border.
+ */
+.sl-markdown-content code:not(:where(.not-content *)):not(pre code) {
+	font-family: var(--sl-font-mono);
+	font-size: 0.75rem;
+	padding: 0.125rem 0.5rem;
+	border-radius: 0.375rem;
+	background-color: color-mix(in oklab, var(--sl-color-gray-2) 8%, transparent);
+}
+
+.expressive-code .frame {
+	--ec-brdRad: 1rem;
+	--ec-brdWd: 1px;
+	--ec-brdCol: var(--sl-color-hairline);
+	--ec-codeFontFml: var(--sl-font-mono);
+	--ec-codeFontSize: 0.875rem;
+	--ec-codeLineHt: 1.7;
+	--ec-codePadBlk: 0.875rem;
+	--ec-codePadInl: 1rem;
+	--ec-codeBg: var(--ch-code-bg);
+	--ec-uiFontFml: var(--sl-font);
+	--ec-uiPadBlk: 0.375rem;
+	--ec-uiPadInl: 0.5rem;
+	/* One border, drawn by the code block itself: the frame only clips. */
+	border: 0;
+	border-radius: calc(1rem + 1px);
+	overflow: hidden;
+	box-shadow: none;
+}
+
+/* The code area keeps the border and the bottom corners; the chrome above it
+   supplies the top corners, and that block's top border is the separator. */
+.expressive-code .frame pre {
+	background-color: var(--ch-code-bg);
+	border: 1px solid var(--sl-color-hairline);
+	border-start-start-radius: 0;
+	border-start-end-radius: 0;
+	border-end-start-radius: calc(1rem + 1px);
+	border-end-end-radius: calc(1rem + 1px);
+}
+
+/*
+ * Window chrome. Expressive Code only draws its dots for terminal frames, so
+ * the bar is drawn here for every code block: the header element is already in
+ * the markup, and the three lights are radial gradients in the macOS palette.
+ */
+.expressive-code .frame .header,
+.expressive-code .frame.is-terminal .header {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-block-size: 2rem;
+	padding: 0 0.75rem;
+	border: 1px solid var(--sl-color-hairline);
+	border-bottom: 0;
+	border-start-start-radius: calc(1rem + 1px);
+	border-start-end-radius: calc(1rem + 1px);
+	background-color: var(--ch-code-bg);
+	font-family: var(--sl-font);
+	font-size: var(--sl-text-xs);
+	font-weight: 500;
+	color: var(--sl-color-gray-3);
+}
+
+.expressive-code .frame .header::before,
+.expressive-code .frame.is-terminal .header::before,
+.expressive-code .frame.has-title:not(.is-terminal) .header::before {
+	content: '';
+	position: absolute;
+	inset-block-start: 50%;
+	inset-inline-start: 0.75rem;
+	translate: 0 -50%;
+	inline-size: 3.25rem;
+	block-size: 0.75rem;
+	background-color: transparent;
+	/*
+	 * One SVG carries all three lights. The colours are sampled from a macOS
+	 * window rather than taken from the nominal palette: each button runs from a
+	 * saturated top to a lighter bottom — the light catches the lower edge — with
+	 * a hairline rim, whereas the earlier version had a bright highlight at the
+	 * top and a dark rim, which read as oversaturated on this background.
+	 */
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='12' viewBox='0 0 52 12'%3E%3Cdefs%3E%3ClinearGradient id='r' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fb695f'/%3E%3Cstop offset='1' stop-color='%23f78e84'/%3E%3C/linearGradient%3E%3ClinearGradient id='y' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fcbc32'/%3E%3Cstop offset='1' stop-color='%23fed447'/%3E%3C/linearGradient%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2362cf32'/%3E%3Cstop offset='1' stop-color='%239edf7d'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg stroke='%23000000' stroke-opacity='.10' stroke-width='.5'%3E%3Ccircle cx='6' cy='6' r='5.5' fill='url(%23r)'/%3E%3Ccircle cx='26' cy='6' r='5.5' fill='url(%23y)'/%3E%3Ccircle cx='46' cy='6' r='5.5' fill='url(%23g)'/%3E%3C/g%3E%3C/svg%3E");
+	background-size: 3.25rem 0.75rem;
+	background-position: 0 50%;
+	background-repeat: no-repeat;
+	/*
+	 * Expressive Code masks this pseudo-element for terminal and titled frames
+	 * (its own dot layout, narrower than this one), which painted our image
+	 * through a mismatched mask: a full red light, half a yellow one, a sliver
+	 * of green. The mask is ours to own now, and the border that titled frames
+	 * draw here goes too.
+	 */
+	mask-image: none;
+	-webkit-mask-image: none;
+	border: 0;
+	opacity: 1;
+}
+
+.expressive-code .frame.is-terminal .header::after {
+	border-bottom: none;
+}
+
+/*
+ * The code area only squares its top corners when the chrome bar is above it;
+ * blocks without a bar keep all four. Without this the corner looked cut off.
+ */
+.expressive-code .frame:has(> .header) pre {
+	border-start-start-radius: 0;
+	border-start-end-radius: 0;
+}
+
+/*
+ * The copy button lives in the chrome bar: 28px square, 8px radius, centred
+ * against the bar, with the icon mask inset so the glyph stays 16px.
+ */
+.expressive-code .frame > .copy {
+	inset-block-start: 0.125rem;
+	inset-inline-end: 0.5rem;
+}
+
+.expressive-code .frame > .copy button {
+	inline-size: 1.75rem;
+	block-size: 1.75rem;
+	border-radius: 0.5rem;
+	background: transparent;
+	opacity: 1;
+}
+
+.expressive-code .frame > .copy button div,
+.expressive-code .frame > .copy button::before {
+	border-radius: inherit;
+}
+
+.expressive-code .frame > .copy button::before {
+	border-color: var(--sl-color-hairline);
+}
+
+.expressive-code .frame > .copy button::after {
+	margin: 0.375rem;
+}
+
+/* Tinted callouts: one hairline around a 16px-rounded box rather than a thick
+   coloured bar on the inline start edge. */
+.starlight-aside {
+	padding: 1rem 1.25rem;
+	border: 1px solid var(--ch-aside-border, var(--sl-color-hairline));
+	border-inline-start-width: 1px;
+	border-radius: 1rem;
+	background-color: var(--ch-aside-bg, var(--sl-color-bg));
+}
+
+.starlight-aside--note {
+	--ch-aside-bg: #eff6ff;
+	--ch-aside-border: #bfdbfe;
+	--sl-color-asides-text-accent: #1d4ed8;
+}
+
+.starlight-aside--tip {
+	--ch-aside-bg: #f0fdf4;
+	--ch-aside-border: #bbf7d0;
+	--sl-color-asides-text-accent: #15803d;
+}
+
+.starlight-aside--caution {
+	--ch-aside-bg: #fffbeb;
+	--ch-aside-border: #fde68a;
+	--sl-color-asides-text-accent: #b45309;
+}
+
+.starlight-aside--danger {
+	--ch-aside-bg: #fef2f2;
+	--ch-aside-border: #fecaca;
+	--sl-color-asides-text-accent: #b91c1c;
+}
+
+:root[data-theme='dark'] .starlight-aside--note {
+	--ch-aside-bg: color-mix(in oklab, #3b82f6 14%, #09090b);
+	--ch-aside-border: color-mix(in oklab, #3b82f6 40%, transparent);
+	--sl-color-asides-text-accent: #93c5fd;
+}
+
+:root[data-theme='dark'] .starlight-aside--tip {
+	--ch-aside-bg: color-mix(in oklab, #22c55e 14%, #09090b);
+	--ch-aside-border: color-mix(in oklab, #22c55e 40%, transparent);
+	--sl-color-asides-text-accent: #86efac;
+}
+
+:root[data-theme='dark'] .starlight-aside--caution {
+	--ch-aside-bg: color-mix(in oklab, #f59e0b 14%, #09090b);
+	--ch-aside-border: color-mix(in oklab, #f59e0b 40%, transparent);
+	--sl-color-asides-text-accent: #fcd34d;
+}
+
+:root[data-theme='dark'] .starlight-aside--danger {
+	--ch-aside-bg: color-mix(in oklab, #ef4444 14%, #09090b);
+	--ch-aside-border: color-mix(in oklab, #ef4444 40%, transparent);
+	--sl-color-asides-text-accent: #fca5a5;
+}
+
+.starlight-aside__title {
+	font-size: var(--sl-text-sm);
+	font-weight: 600;
+}
+
+/* Tables and cards share the callout's 16px rounding. */
+.sl-markdown-content table {
+	font-size: var(--sl-text-sm);
+	border-collapse: collapse;
+}
+
+.sl-markdown-content :is(th, td) {
+	padding: 0.5rem 0.75rem 0.5rem 0;
+	border-bottom: 1px solid var(--sl-color-hairline);
+}
+
+.sl-markdown-content th {
+	font-weight: 600;
+	color: var(--sl-color-white);
+}
+
+.card {
+	border-radius: 1rem;
+}
+
+/*
+ * Sidebar, matched to the reference: a 288px column of 14px links with 6px/16px
+ * padding and a 12px radius, group labels at 14px/600 with no collapse caret,
+ * and the current page marked by a 10% tint of the text colour rather than a
+ * filled block or a bold label.
+ */
+.sidebar-content {
+	font-size: 0.875rem;
+}
+
+.sidebar-content ul a {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.375rem 0.75rem 0.375rem 1rem;
+	border-radius: 0.75rem;
+	line-height: 1.5;
+	color: var(--sl-color-gray-2);
+}
+
+.sidebar-content ul a:hover,
+.sidebar-content ul a:focus-visible {
+	background-color: color-mix(in oklab, var(--sl-color-white) 6%, transparent);
+	color: var(--sl-color-white);
+}
+
+.sidebar-content ul a[aria-current='page'],
+.sidebar-content ul a[aria-current='page']:hover,
+.sidebar-content ul a[aria-current='page']:focus {
+	background-color: color-mix(in oklab, var(--sl-color-white) 10%, transparent);
+	color: var(--sl-color-white);
+	font-weight: 400;
+}
+
+.sidebar-content summary {
+	margin-block: 1.25rem 0.375rem;
+	padding: 0;
+	font-size: 0.875rem;
+	font-weight: 600;
+	letter-spacing: 0;
+	color: var(--sl-color-white);
+}
+
+.sidebar-content > ul > li:first-child > details > summary,
+.sidebar-content > ul > li:first-child > summary {
+	margin-block-start: 0;
+}
+
+/* The reference's groups are always open, so the caret is only noise. */
+.sidebar-content summary .caret {
+	display: none;
+}
+
+/*
+ * Header row. The search field is the tallest control, so the icon and language
+ * controls match its 40px height and its corners, and the row is centred on one
+ * line instead of three heights.
+ */
+button[data-open-modal] {
+	border-radius: 0.75rem;
+}
+
+/*
+ * Below the breakpoint where Starlight hides the "Search" label and the
+ * shortcut, the button is icon-only but still took its width from the label's
+ * box: 31px against the 40px squares beside it. It becomes a square control.
+ */
+@media (max-width: 49.999rem) {
+	button[data-open-modal] {
+		inline-size: 2.5rem;
+		block-size: 2.5rem;
+		padding: 0;
+		justify-content: center;
+	}
+}
+
+.right-group {
+	align-items: center;
+}
+
+.social-icons a {
+	display: grid;
+	place-items: center;
+	inline-size: 2.5rem;
+	block-size: 2.5rem;
+	border-radius: 0.75rem;
+}
+
+.social-icons a svg {
+	inline-size: 1.25rem;
+	block-size: 1.25rem;
+}
+
+.social-icons a:hover {
+	background-color: color-mix(in oklab, var(--sl-color-gray-2) 8%, transparent);
+}
+
+/*
+ * Right-hand table of contents, matched to the reference. Its links are 14px on
+ * a 24px line with 4px of block padding — 32px per item, where Starlight's are
+ * 13px on a 16px line, which reads as cramped — with a 14px/500 heading flush
+ * with the links. The reference indents its heading, but only because a collapse
+ * toggle sits to its left; we have no toggle, so an indent would just look
+ * misaligned. The panel's own inline padding sets the distance from the text
+ * column: 56px, which also leaves the list 252px wide instead of 220px, so short
+ * entries are not pushed against the window edge — the reference's list is 264px
+ * wide against a slightly narrower text column than ours.
+ */
+.right-sidebar-panel {
+	padding-inline-start: 3.5rem;
+}
+
+starlight-toc nav h2 {
+	margin: 0;
+	font-family: var(--sl-font);
+	font-size: var(--sl-text-sm);
+	font-weight: 500;
+	line-height: 1.7;
+	letter-spacing: 0;
+	color: var(--ch-color-toc-heading);
+}
+
+starlight-toc nav a {
+	padding: 0.25rem 0;
+	padding-inline-start: calc(var(--depth, 0) * 1rem);
+	font-size: var(--sl-text-sm);
+	line-height: 1.7;
+	color: var(--ch-color-toc);
+}
+
+starlight-toc nav a:hover,
+starlight-toc nav a[aria-current='true'] {
+	color: var(--sl-color-white);
+}
+
+starlight-toc nav li {
+	margin: 0;
+}
+
+/*
+ * Vertical centring in the header. The bottom hairline is part of the 64px box,
+ * so the content box is one pixel shorter than the padding suggests and the
+ * wordmark sat half a pixel low — 11.5px above it, 12.5px below. Handing that
+ * pixel back to the bottom padding evens the two out, and the wordmark is 36px
+ * so it keeps breathing room on both sides.
+ */
+header.header {
+	padding-block: 0.75rem;
+}
+
+header.header .site-title img {
+	block-size: 2.25rem;
+	inline-size: auto;
+}
+
+/*
+ * The wordmark says what the product is; the badge says which surface you are
+ * on, so a reader who lands on a deep page does not mistake it for the product
+ * site. Drawn as a pseudo-element on the title link, which keeps it inside the
+ * link's flex row without another component override.
+ */
+header.header .site-title::after {
+	/* The trailing empty string keeps the badge out of the link's accessible
+	   name, which should stay the product name. */
+	content: 'DOCS' / '';
+	align-self: center;
+	margin-inline-start: 0.75rem;
+	padding: 0.25rem 0.625rem;
+	border: 1px solid var(--sl-color-hairline);
+	border-radius: 0.625rem;
+	color: var(--sl-color-gray-3);
+	font-family: var(--sl-font);
+	font-size: 0.8125rem; /* 13px */
+	font-weight: 500;
+	letter-spacing: 0.06em;
+	line-height: 1.4;
+}
+
+/*
+ * Gutters, matched to the reference. Its sidebar column starts 32px from the
+ * window edge and its labels sit 16px further in, and the logo lines up with
+ * those labels rather than with the window. Ours had the sidebar at 16px and the
+ * logo at 24px, which is why both read as pressed against the edge.
+ */
+:root {
+	--sl-sidebar-pad-x: 2rem;
+}
+
+@media (min-width: 72rem) {
+	:root {
+		/* 48px: the logo's left edge meets the sidebar labels. */
+		--sl-nav-pad-x: 3rem;
+	}
+}
+
+/*
+ * Sidebar rhythm: the reference puts its group labels and its links on one left
+ * edge, both 16px inside the column. Starlight indents nested items by another
+ * 16px (8px margin, 8px padding) and leaves the labels flush, which staggers the
+ * two. The label gets the same 16px inset and the item indent goes away.
+ */
+.sidebar-content summary {
+	padding-inline-start: 1rem;
+}
+
+.sidebar-content li {
+	margin-inline-start: 0;
+	padding-inline-start: 0;
+}
+
+/* Splash page: a wide tagline, calmer spacing, restrained buttons. */
+.hero {
+	padding-block: 4rem 2.5rem;
+}
+
+.hero .tagline {
+	font-size: var(--sl-text-lg);
+	line-height: 1.65;
+	color: var(--sl-color-text);
+	max-width: 54ch;
+}
+
+.hero h1,
+.hero .title {
+	font-family: var(--ch-font-serif);
+	font-weight: 400;
+	letter-spacing: -0.01em;
+}
+
+.hero .actions a {
+	border-radius: 0.625rem;
+	font-weight: 500;
+	padding: 0.625rem 1.125rem;
+}
+
+.hero + .sl-markdown-content {
+	margin-top: 0;
+}
+
+/* The container follows the reference design and stops growing at 92rem. */
+@media (min-width: 96rem) {
+	.page {
+		max-width: 92rem;
+		margin-inline: auto;
+		border-inline: 1px solid var(--sl-color-hairline);
+	}
+}
+
+/* Prose uses the reference's body colour rather than the UI text colour. */
+.sl-markdown-content {
+	color: var(--ch-color-prose);
+}
+
+/*
+ * Heading rhythm. The reference spaces its headings generously above and
+ * tightly below, and its line height grows as the size shrinks: 32px for a
+ * 24px h2, 28px for a 20px h3, 27px for an 18px h4.
+ */
+.sl-markdown-content h2:not(:where(.not-content *)) {
+	line-height: 1.33;
+	margin-block: 2.25rem 1.125rem; /* 36 / 18 */
+}
+
+.sl-markdown-content h3:not(:where(.not-content *)) {
+	font-family: var(--ch-font-serif);
+	font-weight: 400;
+	line-height: 1.4;
+	margin-block: 2rem 0.875rem; /* 32 / 14 */
+}
+
+.sl-markdown-content h4:not(:where(.not-content *)) {
+	font-family: var(--ch-font-serif);
+	font-weight: 400;
+	line-height: 1.5;
+	margin-block: 1.8rem 0.675rem; /* 28.8 / 10.8 */
+}

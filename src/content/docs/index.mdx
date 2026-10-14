@@ -1,0 +1,54 @@
+---
+title: Champollion
+description: A user-mode RISC-V (RV64GC) Linux binary translator for macOS arm64. Run riscv64 Linux programs with rvrun ./hello — no VM, no guest kernel.
+template: splash
+hero:
+  tagline: Run riscv64 Linux programs on Apple silicon. rvrun loads the ELF, translates it instruction by instruction, and forwards its Linux syscalls to the Mac.
+  actions:
+    - text: Get started
+      link: /start/getting-started/
+      icon: right-arrow
+    - text: How translation works
+      link: /concepts/translation/
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+Champollion is a user-mode RISC-V (RV64GC) Linux binary translator. A program
+runs as an ordinary process on the host: no VM boots, no guest kernel sits
+underneath, and the Linux system calls it makes are served by the translator or
+forwarded to the host's.
+
+```console
+$ rvrun tests/fixtures/hello
+hello from riscv64
+```
+
+## Start here
+
+<CardGrid>
+	<Card title="🚀 Get started">
+		Build `rvrun` from source and run the committed fixtures.
+		[Getting started](/start/getting-started/)
+	</Card>
+	<Card title="🧠 How translation works">
+		From ELF loading to decoded-block caches, the JIT, and syscall dispatch.
+		[Translation](/concepts/translation/)
+	</Card>
+	<Card title="🔀 Route A and B">
+		On the Mac itself, or inside an arm64 Linux VM with raw syscall
+		passthrough. [The two routes](/concepts/routes/)
+	</Card>
+	<Card title="📖 CLI reference">
+		Every flag and environment variable `rvrun` understands.
+		[CLI reference](/reference/cli/)
+	</Card>
+</CardGrid>
+
+## 📌 Status
+
+M5 is done, and route A's done criterion is met: riscv64 container images run
+on the Mac, and Alpine and Debian roots run `apt`, CPython, and friends.
+[Project status](/project/status/) lists what works, the measured performance,
+and the known gaps.

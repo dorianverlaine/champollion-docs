@@ -1,0 +1,64 @@
+---
+title: Getting started
+description: Build rvrun from source, run the committed hello fixture on an Apple silicon Mac, and watch the guest with the RVRUN_* environment variables.
+---
+
+`rvrun` is the whole CLI: it takes a riscv64 Linux ELF (or a `#!` script that
+names one) plus that program's arguments. This page builds it and runs the
+committed fixture — the smallest loop that proves the toolchain end to end.
+
+## Prerequisites
+
+- An Apple silicon Mac (macOS arm64). The same core runs on arm64 Linux as
+  route A; see [Route A and B](/concepts/routes/).
+- Rust stable. The workspace uses edition 2024 (rustc 1.85 or newer).
+- Optional: zig 0.17+ to rebuild the committed fixtures
+  (`tests/fixtures/build.sh`), and `hyperfine` for benchmarks.
+
+## Build
+
+```sh
+git clone https://github.com/dorian-zhao/champollion.git
+cd champollion
+cargo build --release -p rvrun
+```
+
+## Run a program
+
+The repository keeps a tiny fixture that proves the pipeline; it prints one
+line:
+
+```console
+$ ./target/release/rvrun tests/fixtures/hello
+hello from riscv64
+```
+
+Point it at a real program next. Any riscv64 Linux binary works, and a
+dynamically linked one wants its userland:
+
+```sh
+./target/release/rvrun -L /path/to/riscv64-rootfs ./some-program
+```
+
+`-L` resolves the guest's absolute paths (its musl dynamic loader, libraries,
+`/etc` files) inside that directory first, like `qemu-riscv64 -L`.
+
+## Watch it work
+
+Three environment variables turn on the interesting output:
+
+```sh
+RVRUN_STRACE=1 ./target/release/rvrun tests/fixtures/hello  # every syscall
+RVRUN_STATS=1 ./target/release/rvrun tests/fixtures/hello   # instructions retired, MIPS
+RVRUN_PROF=prof.txt ./target/release/rvrun tests/fixtures/hello
+tools/jitprof.py prof.txt                                   # hottest blocks
+```
+
+## Tests
+
+```sh
+cargo test        # the whole suite on the Mac
+tools/linux.sh    # the same suite on arm64 Linux, in release mode
+```
+
+Both hosts are kept green before a change is considered done.
