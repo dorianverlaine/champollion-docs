@@ -1,0 +1,86 @@
+---
+const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
+
+/*
+ * The mark is the Rosetta stone, carved not with hieroglyphs but with the
+ * first bytes of the repository's `hello` fixture — the exact instruction
+ * stream rvrun translates. Champollion deciphered one inscription; this site
+ * deciphers this one.
+ *
+ * 97 f1 ff ff 93 81 01 dd 01 44 81, little-endian, most significant bit
+ * first: auipc gp, 0xfffff / addi gp, gp, -0x230 / c.li s0, 0 / ...
+ */
+const rows = [
+	'10010111',
+	'11110001',
+	'11111111',
+	'11111111',
+	'10010011',
+	'10000001',
+	'00000001',
+	'11011101',
+	'00000001',
+	'01000100',
+	'10000001',
+];
+
+/** An irregular slab, chipped at the top right like the stone itself. */
+const stone = 'M16 12 L44 10 L50 22 L49 52 L34 56 L16 54 Z';
+---
+
+<a href={siteTitleHref} class="site-title sl-flex">
+	<svg
+		class="mark"
+		viewBox="0 0 64 64"
+		role="img"
+		aria-label="A Rosetta stone carved with the machine code of the hello fixture"
+	>
+		<mask id="ch-stone-carve" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+			<path d={stone} fill="white" stroke="white" stroke-width="3" stroke-linejoin="round" />
+			<g
+				fill="black"
+				font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+				font-size="4.2"
+				font-weight="600"
+			>
+				{rows.map((row, index) => (
+					<text x="20" y={15.5 + index * 3.6} textLength="24.5" lengthAdjust="spacing">
+						{row}
+					</text>
+				))}
+			</g>
+		</mask>
+		<path
+			d={stone}
+			fill="currentColor"
+			stroke="currentColor"
+			stroke-width="3"
+			stroke-linejoin="round"
+			mask="url(#ch-stone-carve)"
+		/>
+	</svg>
+	<span translate="no">{siteTitle}</span>
+</a>
+
+<style>
+	@layer starlight.core {
+		.site-title {
+			align-items: center;
+			gap: var(--sl-nav-gap);
+			font-size: var(--sl-text-h4);
+			font-weight: 600;
+			color: var(--sl-color-text-accent);
+			text-decoration: none;
+			white-space: nowrap;
+			min-width: 0;
+		}
+		span {
+			overflow: hidden;
+		}
+		.mark {
+			block-size: 1.9rem;
+			inline-size: 1.9rem;
+			flex-shrink: 0;
+		}
+	}
+</style>

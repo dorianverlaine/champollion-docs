@@ -35,6 +35,7 @@ export default defineConfig({
 			description:
 				'Documentation for Champollion, a user-mode RISC-V (RV64GC) Linux binary translator for macOS arm64.',
 			customCss: ['./src/styles/theme.css'],
+			favicon: '/favicon.svg',
 			// WebMCP tools for browsers that expose `navigator.modelContext`.
 			// The script itself feature-detects and does nothing elsewhere.
 			head: [{ tag: 'script', attrs: { src: '/webmcp.js', type: 'module' } }],
@@ -46,6 +47,8 @@ export default defineConfig({
 				// Adds rel="alternate" links for the .txt and .md twins of each
 				// page, and keeps only one table of contents in the DOM.
 				Head: './src/components/Head.astro',
+				// The Rosetta-stone wordmark carved with the hello binary.
+				SiteTitle: './src/components/SiteTitle.astro',
 				// The language picker as a menu rather than a native select.
 				LanguageSelect: './src/components/LanguageSelect.astro',
 				// The theme picker as a menu rather than a native select.
